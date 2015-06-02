@@ -16,10 +16,12 @@ class MovementManager {
 public:
 	MovementManager();
 	virtual ~MovementManager();
+	bool GetRelativePrespective();
 
 	PlayerClient* pc;
 	LaserProxy* lp;
 	Position2dProxy* pp;
-}
+};
+
 
 #endif /* MOVEMENTMANAGER_H_ */

@@ -9,15 +9,15 @@
 #include "MovementManager.h"
 
 int main() {
-	MovementManager* a = new MovementManager();
+	MovementManager* manager = new MovementManager();
 	while (true) {
-		a->pc.Read();
+		manager->pc->Read();
 
-/*
-		if(manager.GetRelativePrespective(manager.lp))
-			pp.SetSpeed(0.0,0.3);
+
+		if(manager->GetRelativePrespective())
+			manager->pp->SetSpeed(0.0,0.3);
 		else
-			pp.SetSpeed(0.8,0.0);*/
+			manager->pp->SetSpeed(0.8,0.0);
 	}
 
 	return 0;

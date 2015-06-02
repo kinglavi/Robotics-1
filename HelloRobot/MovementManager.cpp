@@ -9,23 +9,22 @@
 
 MovementManager::MovementManager() {
 	pc = new PlayerClient("localhost", 6665);
-	lp = new LaserProxy(&pc);
-	pp = new Position2dProxy(&pc);
+	lp = new LaserProxy(pc);
+	pp = new Position2dProxy(pc);
 }
 
 MovementManager::~MovementManager() {
 	// TODO Auto-generated destructor stub
 }
 
-bool GetRelativePrespective(LaserProxy lp)
+bool MovementManager::GetRelativePrespective() {
+	for (int i=280; i<370; i++)
 	{
-		for (int i=280; i<370; i++)
-		{
-			if (lp[i] < 0.8)
-				return true;
-		}
-		return false;
+		if ((*lp)[i] < 0.8)
+			return true;
 	}
+	return false;
+}
 
 
 
