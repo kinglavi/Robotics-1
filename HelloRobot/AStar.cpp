@@ -209,7 +209,7 @@ string pathFind( const int & xStart, const int & yStart,
     return ""; // no route found
 }
 
-int main()
+int Run()
 {
     srand(time(NULL));
 

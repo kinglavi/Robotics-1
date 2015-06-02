@@ -6,37 +6,20 @@
  */
 
 #include <libplayerc++/playerc++.h>
-
-using namespace PlayerCc;
+#include "MovementManager.h"
 
 int main() {
-
-	PlayerClient pc("localhost", 6665);
-	LaserProxy lp(&pc);
-	Position2dProxy pp(&pc);
-
-	pp.SetMotorEnable(true);
+	MovementManager* a = new MovementManager();
 	while (true) {
-		pc.Read();
+		a->pc.Read();
 
-		if (Sheker(lp))
-
-			pp.SetSpeed(0.0, 0.3);
+/*
+		if(manager.GetRelativePrespective(manager.lp))
+			pp.SetSpeed(0.0,0.3);
 		else
-			pp.SetSpeed(0.8, 0.0);
-
-
+			pp.SetSpeed(0.8,0.0);*/
 	}
+
 	return 0;
-
 }
 
-bool Sheker(LaserProxy lp)
-{
-	for (int i=280; i<370; i++)
-	{
-		if (lp[i] < 0.8)
-			return true;
-	}
-	return false;
-}

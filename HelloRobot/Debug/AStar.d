@@ -1,0 +1,1 @@
+AStar.d: ../AStar.cpp

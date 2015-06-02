@@ -5,14 +5,17 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
 ../AStar.cpp \
+../MovementManager.cpp \
 ../main.cpp 
 
 OBJS += \
 ./AStar.o \
+./MovementManager.o \
 ./main.o 
 
 CPP_DEPS += \
 ./AStar.d \
+./MovementManager.d \
 ./main.d 
 
 
