@@ -18,6 +18,8 @@ int main() {
 			manager->pp->SetSpeed(0.0,0.3);
 		else
 			manager->pp->SetSpeed(0.8,0.0);
+
+		manager->GetRobotsPosition();
 	}
 
 	return 0;

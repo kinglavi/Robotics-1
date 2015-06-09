@@ -11,10 +11,10 @@ MovementManager::MovementManager() {
 	pc = new PlayerClient("localhost", 6665);
 	lp = new LaserProxy(pc);
 	pp = new Position2dProxy(pc);
-}
 
-MovementManager::~MovementManager() {
-	// TODO Auto-generated destructor stub
+	Position* pos = GetRobotsPosition();
+	pp->SetOdometry(pos->x,pos->y,pos->yaw);
+
 }
 
 bool MovementManager::GetRelativePrespective() {
@@ -24,6 +24,25 @@ bool MovementManager::GetRelativePrespective() {
 			return true;
 	}
 	return false;
+}
+
+Position* MovementManager::GetRobotsPosition()
+{
+	double x = pp->GetXPos();
+	double y = pp->GetYPos();
+	double yaw = pp->GetYaw();
+
+	Position* position = new Position(x,y,yaw);
+
+	cout << "position: (" << x << "," << y << "," <<
+	yaw << ")" << endl;
+
+	return position;
+}
+
+double MovementManager::getAlpha()
+{
+
 }
 
 

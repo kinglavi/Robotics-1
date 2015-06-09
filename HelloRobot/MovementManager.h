@@ -9,14 +9,21 @@
 #define MOVEMENTMANAGER_H_
 
 #include <libplayerc++/playerc++.h>
+#include <iostream>
+#include <string>
+#include <stdlib.h>
+#include "Position.h"
 
 using namespace PlayerCc;
+using namespace std;
 
 class MovementManager {
 public:
 	MovementManager();
-	virtual ~MovementManager();
 	bool GetRelativePrespective();
+	Position* GetRobotsPosition();
+	double getAlpha();
+	double getBeta();
 
 	PlayerClient* pc;
 	LaserProxy* lp;
