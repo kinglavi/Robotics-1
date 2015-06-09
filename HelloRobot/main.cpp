@@ -7,9 +7,12 @@
 
 #include <libplayerc++/playerc++.h>
 #include "MovementManager.h"
+#include "PngManagement/pngUtil.h"
 
 int main() {
 	MovementManager* manager = new MovementManager();
+	ConvertMapBlackToWhiteAndWhiteToBlack("/usr/robotics/PcBotWorld/hospital_section.png");
+
 	while (true) {
 		manager->pc->Read();
 

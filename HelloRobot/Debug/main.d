@@ -12,7 +12,7 @@ main.d: ../main.cpp \
  /usr/local/include/player-2.0/libplayerc++/playerclient.h \
  /usr/local/include/player-2.0/libplayerc++/playererror.h \
  /usr/local/include/player-2.0/libplayerc++/clientproxy.h \
- ../MovementManager.h ../Position.h
+ ../MovementManager.h ../Position.h ../PngManagement/pngUtil.h
 
 /usr/local/include/player-2.0/libplayerc++/playerc++.h:
 
@@ -43,3 +43,5 @@ main.d: ../main.cpp \
 ../MovementManager.h:
 
 ../Position.h:
+
+../PngManagement/pngUtil.h:
