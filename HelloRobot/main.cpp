@@ -11,7 +11,7 @@
 
 int main() {
 	MovementManager* manager = new MovementManager();
-	ConvertMapBlackToWhiteAndWhiteToBlack("/usr/robotics/PcBotWorld/hospital_section.png");
+	PadMap("/usr/robotics/PcBotWorld/hospital_section.png", 2);
 
 	while (true) {
 		manager->pc->Read();

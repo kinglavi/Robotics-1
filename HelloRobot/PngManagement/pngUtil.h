@@ -11,8 +11,7 @@
 #include <vector>
 void encodeOneStep(const char* filename, std::vector<unsigned char> image, unsigned width, unsigned height);
 void decodeOneStep(const char* filename);
-void ConvertMapBlackToWhiteAndWhiteToBlack(const char* filename, , int paddingSize);
-
+void PadMap(const char* filename, unsigned paddingSize);
 
 
 #endif /* PNGUTIL_H_ */

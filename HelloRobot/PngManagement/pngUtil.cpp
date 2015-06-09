@@ -36,7 +36,7 @@ void decodeOneStep(const char* filename) {
 
 	//the pixels are now in the vector "image", 4 bytes per pixel, ordered RGBARGBA..., use it as texture, draw it, ...
 }
-void ConvertMapBlackToWhiteAndWhiteToBlack(const char* filename, int paddingSize) {
+void PadMap(const char* filename, unsigned paddingSize) {
 	std::vector<unsigned char> image; //the raw pixels
 	unsigned width, height, paddedWidth, paddedHeight;
 	unsigned x, y, innerX, innerY;
@@ -50,9 +50,21 @@ void ConvertMapBlackToWhiteAndWhiteToBlack(const char* filename, int paddingSize
 
 	std::vector<unsigned char> navImage; //the raw pixels
 	std::vector<unsigned char> paddedImage;
-	navImage.resize(width * height * 4);
-	paddedImage.resize(width * height * 4);
+
+	paddedWidth = width + (paddingSize * 2);
+	paddedHeight = height + (paddingSize * 2);
+	paddedImage.resize(paddedWidth * paddedHeight * 4);
 	unsigned char color;
+
+	for (y = 0; y < paddedHeight; y++)
+		for (x = 0; x < paddedWidth; x++)
+		{
+			paddedImage[y * (paddedWidth * 4) + (x * 4 + 0)] = 255;
+			paddedImage[y * (paddedWidth * 4) + (x * 4 + 1)] = 255;
+			paddedImage[y * (paddedWidth * 4) + (x * 4 + 2)] = 255;
+			paddedImage[y * (paddedWidth * 4) + (x * 4 + 3)] = 255;
+		}
+
 
 
 	for (y = 0; y < height; y++)
@@ -63,29 +75,24 @@ void ConvertMapBlackToWhiteAndWhiteToBlack(const char* filename, int paddingSize
 //				color = 0;
 //			else
 //				color = 255;
-			if (!image[y * width * 4 + x * 4 + 0] && !image[y * width * 4 + x * 4 + 1] && !image[y * width * 4 + x * 4 + 2])
+			if (image[y * width * 4 + x * 4 + 0] == 0 && image[y * width * 4 + x * 4 + 1] == 0 && image[y * width * 4 + x * 4 + 2] == 0)
 			{
 
 				for (innerX = x; innerX <= x +(paddingSize*2); innerX++)
 				{
 					for (innerY = y ; innerY <= y + (paddingSize*2); innerY++)
 					{
-						paddedImage[((innerY + paddingSize) * (width + paddingSize*2) * 4) + (innerX + (paddingSize) * 4 + 0)] = 0;
-						paddedImage[((innerY + paddingSize) * (width + paddingSize*2) * 4) + (innerX + (paddingSize) * 4 + 1)] = 0;
-						paddedImage[((innerY + paddingSize) * (width + paddingSize*2) * 4) + (innerX + (paddingSize) * 4 + 2)] = 0;
-						paddedImage[((innerY + paddingSize) * (width + paddingSize*2) * 4) + (innerX + (paddingSize) * 4 + 3)] = 255;
+						paddedImage[innerY * (paddedWidth * 4) + (innerX * 4 + 0)] = 0;
+						paddedImage[innerY * (paddedWidth * 4) + (innerX * 4 + 1)] = 0;
+						paddedImage[innerY * (paddedWidth * 4) + (innerX * 4 + 2)] = 0;
+						paddedImage[innerY * (paddedWidth * 4) + (innerX * 4 + 3)] = 255;
 					}
 				}
 
 			}
-
-			navImage[y * width * 4 + x * 4 + 0] = color;
-			navImage[y * width * 4 + x * 4 + 1] = color;
-			navImage[y * width * 4 + x * 4 + 2] = color;
-			navImage[y * width * 4 + x * 4 + 3] = 255;
 		}
 
 
 
-	encodeOneStep("/usr/robotics/PcBotWorld/newMap.png", navImage, width, height);
+	encodeOneStep("/usr/robotics/PcBotWorld/newMap.png", paddedImage, paddedWidth, paddedHeight);
 }
