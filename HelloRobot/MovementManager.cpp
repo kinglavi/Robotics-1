@@ -6,6 +6,7 @@
  */
 
 #include "MovementManager.h"
+#include "Obstacle.h"
 
 MovementManager::MovementManager() {
 	pc = new PlayerClient("localhost", 6665);
@@ -14,16 +15,35 @@ MovementManager::MovementManager() {
 
 	Position* pos = GetRobotsPosition();
 	pp->SetOdometry(pos->x,pos->y,pos->yaw);
+}
+
+void MovementManager::GetObastaclePosition()
+{
+	Position* pos = GetRobotsPosition();
+
 
 }
 
-bool MovementManager::GetRelativePrespective() {
-	for (int i=280; i<370; i++)
+double MovementManager::GetLazerAngle(int lazerReadingIndex)
+{
+	return ((lazerReadingIndex - 333)*0.36);
+}
+
+vector<Obstacle*> MovementManager::GetRelativePrespective()
+{
+	vector<Obstacle*> obstacles;
+
+	// Getting only the relevant readings in front of the robot.
+	for (int i=0; i<666; i++)
 	{
 		if ((*lp)[i] < 0.8)
-			return true;
+		{
+			Obstacle* obs = new Obstacle(GetLazerAngle(i), (*lp)[i]);
+			obstacles.push_back(obs);
+		}
 	}
-	return false;
+
+	return obstacles;
 }
 
 Position* MovementManager::GetRobotsPosition()

@@ -12,7 +12,9 @@
 #include <iostream>
 #include <string>
 #include <stdlib.h>
+#include <vector>
 #include "Position.h"
+#include "Obstacle.h"
 
 using namespace PlayerCc;
 using namespace std;
@@ -20,8 +22,10 @@ using namespace std;
 class MovementManager {
 public:
 	MovementManager();
-	bool GetRelativePrespective();
+	vector<Obstacle*> GetRelativePrespective();
 	Position* GetRobotsPosition();
+	void GetObastaclePosition();
+	double GetLazerAngle(int lazerReadingIndex);
 	double getAlpha();
 	double getBeta();
 

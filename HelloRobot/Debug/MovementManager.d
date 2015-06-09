@@ -11,7 +11,8 @@ MovementManager.d: ../MovementManager.cpp ../MovementManager.h \
  /usr/local/include/player-2.0/libplayerc++/playerc++config.h \
  /usr/local/include/player-2.0/libplayerc++/playerclient.h \
  /usr/local/include/player-2.0/libplayerc++/playererror.h \
- /usr/local/include/player-2.0/libplayerc++/clientproxy.h ../Position.h
+ /usr/local/include/player-2.0/libplayerc++/clientproxy.h ../Position.h \
+ ../Obstacle.h
 
 ../MovementManager.h:
 
@@ -42,3 +43,5 @@ MovementManager.d: ../MovementManager.cpp ../MovementManager.h \
 /usr/local/include/player-2.0/libplayerc++/clientproxy.h:
 
 ../Position.h:
+
+../Obstacle.h:

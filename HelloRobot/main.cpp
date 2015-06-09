@@ -12,15 +12,22 @@
 int main() {
 	MovementManager* manager = new MovementManager();
 	PadMap("/usr/robotics/PcBotWorld/hospital_section.png", 2);
+	vector<Obstacle*> obs = manager->GetRelativePrespective();
+	vector<Obstacle*>::iterator i;
+
+	for(i=obs.begin(); i!=obs.end(); i++)
+	{
+		cout << "Angle: " << (*i)->Angle << ", Distance: " << (*i)->Distance << endl;
+	}
 
 	while (true) {
 		manager->pc->Read();
 
 
-		if(manager->GetRelativePrespective())
+/*		if(manager->GetRelativePrespective())
 			manager->pp->SetSpeed(0.0,0.3);
 		else
-			manager->pp->SetSpeed(0.8,0.0);
+			manager->pp->SetSpeed(0.8,0.0);*/
 
 		manager->GetRobotsPosition();
 	}

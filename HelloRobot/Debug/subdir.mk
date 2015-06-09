@@ -6,18 +6,21 @@
 CPP_SRCS += \
 ../AStar.cpp \
 ../MovementManager.cpp \
+../Obstacle.cpp \
 ../Position.cpp \
 ../main.cpp 
 
 OBJS += \
 ./AStar.o \
 ./MovementManager.o \
+./Obstacle.o \
 ./Position.o \
 ./main.o 
 
 CPP_DEPS += \
 ./AStar.d \
 ./MovementManager.d \
+./Obstacle.d \
 ./Position.d \
 ./main.d 
 
