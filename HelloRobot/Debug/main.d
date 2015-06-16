@@ -12,8 +12,10 @@ main.d: ../main.cpp \
  /usr/local/include/player-2.0/libplayerc++/playerclient.h \
  /usr/local/include/player-2.0/libplayerc++/playererror.h \
  /usr/local/include/player-2.0/libplayerc++/clientproxy.h \
- ../MovementManager.h ../Position.h ../Obstacle.h \
- ../PngManagement/pngUtil.h
+ ../Common/MovementManager.h ../Common/../Position.h \
+ ../Common/../Obstacle.h ../Mapping/pngUtil.h \
+ ../Common/ConfigurationManager.h ../Common/../Robot.h \
+ ../Common/../Mapping/Map.h ../Common/../Mapping/pngUtil.h
 
 /usr/local/include/player-2.0/libplayerc++/playerc++.h:
 
@@ -41,10 +43,18 @@ main.d: ../main.cpp \
 
 /usr/local/include/player-2.0/libplayerc++/clientproxy.h:
 
-../MovementManager.h:
+../Common/MovementManager.h:
 
-../Position.h:
+../Common/../Position.h:
 
-../Obstacle.h:
+../Common/../Obstacle.h:
 
-../PngManagement/pngUtil.h:
+../Mapping/pngUtil.h:
+
+../Common/ConfigurationManager.h:
+
+../Common/../Robot.h:
+
+../Common/../Mapping/Map.h:
+
+../Common/../Mapping/pngUtil.h:

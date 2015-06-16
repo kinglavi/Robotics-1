@@ -6,11 +6,14 @@
  */
 
 #include <libplayerc++/playerc++.h>
-#include "MovementManager.h"
-#include "PngManagement/pngUtil.h"
+#include "Common/MovementManager.h"
+#include "Mapping/pngUtil.h"
+#include "Common/ConfigurationManager.h"
 
 int main() {
 	MovementManager* manager = new MovementManager();
+	ConfigurationManager* configuration = new ConfigurationManager();
+
 	PadMap("/usr/robotics/PcBotWorld/hospital_section.png", 2);
 	vector<Obstacle*> obs = manager->GetRelativePrespective();
 	vector<Obstacle*>::iterator i;

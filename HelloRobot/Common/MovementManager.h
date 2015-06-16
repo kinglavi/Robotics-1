@@ -13,8 +13,8 @@
 #include <string>
 #include <stdlib.h>
 #include <vector>
-#include "Position.h"
-#include "Obstacle.h"
+#include "../Position.h"
+#include "../Obstacle.h"
 
 using namespace PlayerCc;
 using namespace std;

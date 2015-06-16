@@ -4,24 +4,21 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
-../AStar.cpp \
-../MovementManager.cpp \
 ../Obstacle.cpp \
 ../Position.cpp \
+../Robot.cpp \
 ../main.cpp 
 
 OBJS += \
-./AStar.o \
-./MovementManager.o \
 ./Obstacle.o \
 ./Position.o \
+./Robot.o \
 ./main.o 
 
 CPP_DEPS += \
-./AStar.d \
-./MovementManager.d \
 ./Obstacle.d \
 ./Position.d \
+./Robot.d \
 ./main.d 
 
 

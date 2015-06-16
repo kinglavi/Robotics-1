@@ -8,7 +8,9 @@ RM := rm -rf
 
 # All of the sources participating in the build are defined here
 -include sources.mk
--include PngManagement/subdir.mk
+-include Path/subdir.mk
+-include Mapping/subdir.mk
+-include Common/subdir.mk
 -include subdir.mk
 -include objects.mk
 

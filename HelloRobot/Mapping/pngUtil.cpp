@@ -6,8 +6,6 @@
  */
 #include "pngUtil.h"
 #include "loadpng.h"
-#include <iostream>
-
 
 //Encode from raw pixels to disk with a single function call
 //The image argument has width * height RGBA pixels or width * height * 4 bytes

@@ -6,7 +6,6 @@
  */
 
 #include "MovementManager.h"
-#include "Obstacle.h"
 
 MovementManager::MovementManager() {
 	pc = new PlayerClient("localhost", 6665);
@@ -20,8 +19,6 @@ MovementManager::MovementManager() {
 void MovementManager::GetObastaclePosition()
 {
 	Position* pos = GetRobotsPosition();
-
-
 }
 
 double MovementManager::GetLazerAngle(int lazerReadingIndex)
