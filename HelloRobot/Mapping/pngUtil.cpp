@@ -9,7 +9,7 @@
 
 //Encode from raw pixels to disk with a single function call
 //The image argument has width * height RGBA pixels or width * height * 4 bytes
-void encodeOneStep(const char* filename, std::vector<unsigned char> image,
+void pngUtil::encodeOneStep(const char* filename, std::vector<unsigned char> image,
 		unsigned width, unsigned height) {
 	//Encode the image
 	unsigned error = lodepng::encode(filename, image, width, height);
@@ -20,7 +20,7 @@ void encodeOneStep(const char* filename, std::vector<unsigned char> image,
 				<< lodepng_error_text(error) << std::endl;
 }
 
-void decodeOneStep(const char* filename) {
+void pngUtil::decodeOneStep(const char* filename) {
 	std::vector<unsigned char> image; //the raw pixels
 	unsigned width, height;
 
@@ -34,7 +34,7 @@ void decodeOneStep(const char* filename) {
 
 	//the pixels are now in the vector "image", 4 bytes per pixel, ordered RGBARGBA..., use it as texture, draw it, ...
 }
-void PadMap(const char* filename, unsigned paddingSize) {
+void pngUtil::PadMap(const char* filename, unsigned paddingSize) {
 	std::vector<unsigned char> image; //the raw pixels
 	unsigned width, height, paddedWidth, paddedHeight;
 	unsigned x, y, innerX, innerY;
@@ -93,7 +93,7 @@ void PadMap(const char* filename, unsigned paddingSize) {
 	encodeOneStep("/usr/robotics/PcBotWorld/newMap.png", paddedImage, paddedWidth, paddedHeight);
 }
 
-void CreateGrid(const char* filename, unsigned paddingSize, int MapResolutionCM, int GridResolutionCM)
+void pngUtil::CreateGrid(const char* filename, unsigned paddingSize, int MapResolutionCM, int GridResolutionCM)
 {
 	PadMap(filename, paddingSize);
 	double PixelsToCell = GridResolutionCM/MapResolutionCM;
@@ -119,4 +119,17 @@ void CreateGrid(const char* filename, unsigned paddingSize, int MapResolutionCM,
 				image[y * (width * 4) + (x * 4 + 3)] = 255;
 			}
 
+}
+
+unsigned char pngUtil::getPixelColor(const std::vector<unsigned char>& rawImage, unsigned width, unsigned height, unsigned row, unsigned col) {
+	unsigned basePos = row * width * 4 + col * 4;
+
+	if (width == 0 || height == 0 || basePos + A_OFFSET > rawImage.size()) {
+		return COLOR_INVALID;
+	}
+
+	if (rawImage[basePos + R_OFFSET] == COLOR_BLACK && rawImage[basePos + G_OFFSET] == COLOR_BLACK && rawImage[basePos + B_OFFSET] == COLOR_BLACK) {
+		return COLOR_BLACK;
+	}
+	return COLOR_WHITE;
 }
