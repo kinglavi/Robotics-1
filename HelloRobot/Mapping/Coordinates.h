@@ -4,13 +4,13 @@
 
 using namespace std;
 
-namespace model {
+namespace Mapping{
 
 	class Coordinates {
 		public:
-			double X; // CM
-			double Y; // CM
-			double Yaw; // RAD
+			double X;
+			double Y;
+			double Yaw;
 
 			Coordinates();
 			Coordinates(double xCM, double yCM, double yawRad);

@@ -7,7 +7,7 @@
 
 using namespace std;
 
-namespace model {
+namespace Mapping {
 
 	Coordinates::Coordinates() :
 			X(0), Y(0), Yaw(0) {

@@ -3,11 +3,12 @@
 #include <iostream>
 #include <vector>
 
+#include "../Common/ConfigurationManager.h"
 #include "Coordinates.h"
 
 using namespace std;
 
-namespace model {
+namespace Mapping {
 
 	class Cell {
 		public:
@@ -37,7 +38,6 @@ namespace model {
 
 			Cell& operator=(const Cell& cell);
 			friend ostream& operator<<(ostream& os, Cell* cell);
-
 		protected:
 			vector<Cell*> m_Neighbors;
 			unsigned m_Col;

@@ -15,7 +15,6 @@ class pngUtil {
 	static const unsigned COLOR_BLACK = 0;
 	static const unsigned COLOR_WHITE = 255;
 	static const int COLOR_INVALID = -1;
-	using std;
 
 	void encodeOneStep(const char* filename, std::vector<unsigned char> image, unsigned width, unsigned height);
 	void decodeOneStep(const char* filename);

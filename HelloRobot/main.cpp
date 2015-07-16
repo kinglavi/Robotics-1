@@ -13,8 +13,8 @@
 int main() {
 	MovementManager* manager = new MovementManager();
 	ConfigurationManager* configuration = new ConfigurationManager();
+	pngUtil* util = new pngUtil();
 
-	PadMap("/usr/robotics/PcBotWorld/hospital_section.png", 2);
 	vector<Obstacle*> obs = manager->GetRelativePrespective();
 	vector<Obstacle*>::iterator i;
 

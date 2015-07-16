@@ -20,22 +20,23 @@ class ConfigurationManager {
 public:
 	ConfigurationManager();
 	// Start Location
-	int Start_X;
-	int Start_Y;
-	int Start_Yaw;
+	static int Start_X;
+	static int Start_Y;
+	static int Start_Yaw;
 
 	// Goal
-	int Goal_X;
-	int Goal_Y;
+	static int Goal_X;
+	static int Goal_Y;
 
-	Robot* robot;
-	Map* map;
+	static Robot* robot;
+	static Map* map;
 
-	void ReadFile(string path);
-	void ParseLine(string line);
+	static void ReadFile(string path);
+	static void ParseLine(string line);
+	static char* ConvertStringToCharArray(string string);
 private:
 	int str2int(const char* str, int h);
-	char* ConvertStringToCharArray(string string);
+
 };
 
 #endif /* CONFIGURATIONMANAGER_H_ */
