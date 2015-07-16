@@ -32,7 +32,7 @@ namespace Mapping {
 			inline double getCost() const { return m_Cost; }
 			inline void setCost(double cost) { m_Cost = cost; }
 
-			Coordinates getWorldLocationCm() const;
+			Coordinates* getWorldLocationCm() const;
 			bool isWalkable() const;
 			bool isClear() const;
 

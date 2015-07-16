@@ -1,7 +1,7 @@
 /*
  * ConfigurationManager.h
  *
- *  Created on: Jun 16, 2015
+ *  Created on: Jul 16, 2015
  *      Author: colman
  */
 
@@ -16,27 +16,50 @@
 #include "../Mapping/Map.h"
 using namespace std;
 
+namespace Common {
+
 class ConfigurationManager {
 public:
-	ConfigurationManager();
+	virtual ~ConfigurationManager();
+	static ConfigurationManager* getConfig();
+
 	// Start Location
-	static int Start_X;
-	static int Start_Y;
-	static int Start_Yaw;
+	int GetStartX(){return Start_X;}
+	int GetStartY(){return Start_Y;}
+	int GetStartYaw(){return Start_Yaw;}
 
 	// Goal
-	static int Goal_X;
-	static int Goal_Y;
+	int GetGoalX(){return Goal_X;}
+	int GetGoalY(){return Goal_Y;}
 
-	static Robot* robot;
-	static Map* map;
+	Robot* GetRobot(){return robot;}
+	Map* GetMap(){return map;}
 
-	static void ReadFile(string path);
-	static void ParseLine(string line);
-	static char* ConvertStringToCharArray(string string);
+	void ReadFile(string path);
+	void ParseLine(string line);
+
 private:
-	int str2int(const char* str, int h);
+	static ConfigurationManager* m_Config;
+	ConfigurationManager();
+	ConfigurationManager(const ConfigurationManager&) = delete;
+	ConfigurationManager& operator=(const ConfigurationManager&) = delete;
 
+	// Start Location
+	int Start_X;
+	int Start_Y;
+	int Start_Yaw;
+
+	// Goal
+	int Goal_X;
+	int Goal_Y;
+
+	Robot* robot;
+	Map* map;
+
+	int str2int(const char* str, int h);
+	char* ConvertStringToCharArray(string string);
 };
+
+} /* namespace Common */
 
 #endif /* CONFIGURATIONMANAGER_H_ */

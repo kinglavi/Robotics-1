@@ -1,19 +1,31 @@
 /*
  * ConfigurationManager.cpp
  *
- *  Created on: Jun 16, 2015
+ *  Created on: Jul 16, 2015
  *      Author: colman
  */
 
 #include "ConfigurationManager.h"
 
-ConfigurationManager::ConfigurationManager()
-{
-	map = new Map();
-	robot = new Robot();
+namespace Common {
+
+ConfigurationManager* ConfigurationManager::m_Config = NULL;
+
+ConfigurationManager::ConfigurationManager() {
 	ReadFile("/home/colman/Desktop/Robotics/Robotics/HelloRobot/configuration.txt");
 }
 
+ConfigurationManager::~ConfigurationManager() {
+	delete m_Config;
+	m_Config = NULL;
+}
+ConfigurationManager* ConfigurationManager::getConfig() {
+	if (!m_Config) {
+		m_Config = new ConfigurationManager();
+	}
+
+	return m_Config;
+}
 char* ConfigurationManager::ConvertStringToCharArray(string string)
 {
 	char converted[1024];
@@ -89,4 +101,4 @@ void ConfigurationManager::ParseLine(string line)
 		map->GridResolutionCM = atof(value.c_str());
 	}
 }
-
+} /* namespace Common */

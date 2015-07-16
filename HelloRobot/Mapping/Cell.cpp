@@ -1,8 +1,9 @@
 #include "Cell.h"
 
 #include <float.h>
-
+#include "../Common/ConfigurationManager.h"
 using namespace std;
+using namespace Common;
 
 namespace Mapping {
 
@@ -50,11 +51,12 @@ namespace Mapping {
 		return os;
 	}
 
-	Coordinates Cell::getWorldLocationCm() const {
-		double x_cm = m_Col * ConfigurationManager::map->GridResolutionCM;
-		double y_cm = m_Row * ConfigurationManager::map->GridResolutionCM;
+	Coordinates* Cell::getWorldLocationCm() const {
+		int resolution = ConfigurationManager::getConfig()->GetMap()->GridResolutionCM;
+		double x_cm = m_Col * resolution;
+		double y_cm = m_Row * resolution;
 
-		Coordinates coordinate = { x_cm, y_cm, 0};
+		Coordinates* coordinate = new Coordinates( x_cm, y_cm, 0);
 		return coordinate;
 	}
 

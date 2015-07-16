@@ -12,7 +12,7 @@
 
 int main() {
 	MovementManager* manager = new MovementManager();
-	ConfigurationManager* configuration = new ConfigurationManager();
+
 	pngUtil* util = new pngUtil();
 
 	vector<Obstacle*> obs = manager->GetRelativePrespective();
