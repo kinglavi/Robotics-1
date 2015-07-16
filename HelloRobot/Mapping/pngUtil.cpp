@@ -110,8 +110,8 @@ void CreateGrid(const char* filename, unsigned paddingSize, int MapResolutionCM,
 
 	unsigned x, y;
 
-	for (y = 0; y < height; y+=PixelsToCell)
-			for (x = 0; x < width; x+=PixelsToCell)
+	for (x = 0; x < height; x+=PixelsToCell)
+			for (y = 0; y < width; y+=PixelsToCell)
 			{
 				image[y * (width * 4) + (x * 4 + 0)] = 255;
 				image[y * (width * 4) + (x * 4 + 1)] = 255;
