@@ -90,7 +90,33 @@ void PadMap(const char* filename, unsigned paddingSize) {
 			}
 		}
 
-
-
 	encodeOneStep("/usr/robotics/PcBotWorld/newMap.png", paddedImage, paddedWidth, paddedHeight);
+}
+
+void CreateGrid(const char* filename, unsigned paddingSize, int MapResolutionCM, int GridResolutionCM)
+{
+	PadMap(filename, paddingSize);
+	double PixelsToCell = GridResolutionCM/MapResolutionCM;
+	unsigned width, height;
+
+	std::vector<unsigned char> image;
+
+	unsigned error = lodepng::decode(image, width, height, filename);
+
+	int gridHeight = height/PixelsToCell;
+	int gridWidth = width/PixelsToCell;
+
+	unsigned char map [gridHeight][gridHeight];
+
+	unsigned x, y;
+
+	for (y = 0; y < height; y+=PixelsToCell)
+			for (x = 0; x < width; x+=PixelsToCell)
+			{
+				image[y * (width * 4) + (x * 4 + 0)] = 255;
+				image[y * (width * 4) + (x * 4 + 1)] = 255;
+				image[y * (width * 4) + (x * 4 + 2)] = 255;
+				image[y * (width * 4) + (x * 4 + 3)] = 255;
+			}
+
 }
