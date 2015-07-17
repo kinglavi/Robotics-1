@@ -6,12 +6,16 @@
  */
 
 #include "ConfigurationManager.h"
+#include <sstream>
+#include <string>
 
 namespace Common {
 
 ConfigurationManager* ConfigurationManager::m_Config = NULL;
 
 ConfigurationManager::ConfigurationManager() {
+	map = new Map();
+	robot = new Robot();
 	ReadFile("/home/colman/Desktop/Robotics/Robotics/HelloRobot/configuration.txt");
 }
 
