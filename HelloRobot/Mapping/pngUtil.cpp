@@ -6,6 +6,7 @@
  */
 #include "pngUtil.h"
 #include "loadpng.h"
+#include <math.h>
 
 //Encode from raw pixels to disk with a single function call
 //The image argument has width * height RGBA pixels or width * height * 4 bytes
@@ -33,6 +34,9 @@ void pngUtil::decodeOneStep(const char* filename) {
 				<< lodepng_error_text(error) << std::endl;
 
 	//the pixels are now in the vector "image", 4 bytes per pixel, ordered RGBARGBA..., use it as texture, draw it, ...
+}
+bool pngUtil::IsInDistance(int firstX,int firstY,int secondX,int secondY, unsigned paddingSize) {
+	return (sqrt((double)((firstX - secondX)*(firstX - secondX) + (firstY - secondY)*(firstY - secondY))) < paddingSize);
 }
 void pngUtil::PadMap(const char* filename, unsigned paddingSize) {
 	std::vector<unsigned char> image; //the raw pixels
@@ -75,22 +79,23 @@ void pngUtil::PadMap(const char* filename, unsigned paddingSize) {
 //				color = 255;
 			if (image[y * width * 4 + x * 4 + 0] == 0 && image[y * width * 4 + x * 4 + 1] == 0 && image[y * width * 4 + x * 4 + 2] == 0)
 			{
-
 				for (innerX = x; innerX <= x +(paddingSize*2); innerX++)
 				{
 					for (innerY = y ; innerY <= y + (paddingSize*2); innerY++)
 					{
-						paddedImage[innerY * (paddedWidth * 4) + (innerX * 4 + 0)] = 0;
-						paddedImage[innerY * (paddedWidth * 4) + (innerX * 4 + 1)] = 0;
-						paddedImage[innerY * (paddedWidth * 4) + (innerX * 4 + 2)] = 0;
-						paddedImage[innerY * (paddedWidth * 4) + (innerX * 4 + 3)] = 255;
+						if (IsInDistance(x + paddingSize, y + paddingSize, innerX, innerY, paddingSize))
+						{
+							paddedImage[innerY * (paddedWidth * 4) + (innerX * 4 + 0)] = 0;
+							paddedImage[innerY * (paddedWidth * 4) + (innerX * 4 + 1)] = 0;
+							paddedImage[innerY * (paddedWidth * 4) + (innerX * 4 + 2)] = 0;
+							paddedImage[innerY * (paddedWidth * 4) + (innerX * 4 + 3)] = 255;
+						}
 					}
 				}
-
 			}
 		}
 
-	encodeOneStep("/usr/robotics/PcBotWorld/newMap.png", paddedImage, paddedWidth, paddedHeight);
+	encodeOneStep("/home/colman/Desktop/Robotics/Robotics/HelloRobot/newMap.png", paddedImage, paddedWidth, paddedHeight);
 }
 
 void pngUtil::CreateGrid(const char* filename, unsigned paddingSize, int MapResolutionCM, int GridResolutionCM)

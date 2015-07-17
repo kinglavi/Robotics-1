@@ -11,9 +11,11 @@
 #include "Common/ConfigurationManager.h"
 
 int main() {
-	MovementManager* manager = new MovementManager();
-
 	pngUtil* util = new pngUtil();
+	const char* filename = "/home/colman/Desktop/Robotics/Robotics/HelloRobot/roboticLabMap.png";
+	util->PadMap(filename, 5);
+
+	MovementManager* manager = new MovementManager();
 
 	vector<Obstacle*> obs = manager->GetRelativePrespective();
 	vector<Obstacle*>::iterator i;
