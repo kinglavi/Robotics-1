@@ -40,7 +40,7 @@ void pngUtil::decodeOneStep(const char* filename) {
 bool pngUtil::IsInDistance(int firstX,int firstY,int secondX,int secondY, unsigned paddingSize) {
 	return (sqrt((double)((firstX - secondX)*(firstX - secondX) + (firstY - secondY)*(firstY - secondY))) < paddingSize);
 }
-void pngUtil::PadMap(const char* filename, unsigned paddingSize) {
+char* pngUtil::PadMap(const char* filename, unsigned paddingSize) {
 	std::vector<unsigned char> image; //the raw pixels
 	unsigned width, height, paddedWidth, paddedHeight;
 	unsigned x, y, innerX, innerY;
@@ -99,11 +99,13 @@ void pngUtil::PadMap(const char* filename, unsigned paddingSize) {
 
 	char* path = StringHelper::ConvertStringToCharArray(ConfigurationManager::getConfig()->GetMap()->Map_Directory + "/newMap.png");
 	encodeOneStep(path, paddedImage, paddedWidth, paddedHeight);
+
+	return path;
 }
 
-void pngUtil::CreateGrid(const char* filename, unsigned paddingSize, int MapResolutionCM, int GridResolutionCM)
+void pngUtil::CreateGrid(unsigned paddingSize, int MapResolutionCM, int GridResolutionCM)
 {
-	PadMap(filename, paddingSize);
+	char* filename = PadMap(filename, paddingSize);
 	double PixelsToCell = GridResolutionCM/MapResolutionCM;
 	unsigned width, height;
 

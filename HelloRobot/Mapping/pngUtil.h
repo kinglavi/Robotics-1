@@ -24,7 +24,7 @@ class pngUtil {
 	void decodeOneStep(const char* filename);
 	static unsigned char getPixelColor(const std::vector<unsigned char>& rawImage, unsigned width, unsigned height, unsigned row, unsigned col);
 	void PadMap(const char* filename, unsigned paddingSize);
-	void CreateGrid(const char* filename, unsigned paddingSize, int MapResolutionCM, int GridResolutionCM);
+	void CreateGrid(unsigned paddingSize, int MapResolutionCM, int GridResolutionCM)
 	private:
 	bool IsInDistance(int firstX,int firsty,int secondX,int secondY, unsigned paddingSize);
 };

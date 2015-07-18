@@ -20,7 +20,7 @@ int main() {
 	string path = ConfigurationManager::getConfig()->GetMap()->Map_Path;
 	const char* filename = StringHelper::ConvertStringToCharArray(path);
 
-	util->CreateGrid(filename, (1/mapRes)*(robotSize/2), mapRes, gridRes);
+	util->CreateGrid((1/mapRes)*(robotSize/2), mapRes, gridRes);
 
 	MovementManager* manager = new MovementManager();
 
