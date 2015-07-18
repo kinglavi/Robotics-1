@@ -45,7 +45,7 @@ int main() {
 	}
 
 	while (true) {
-		robot->playerClient->Read();
+		//robot->playerClient->Read();
 
 
 /*		if(manager->GetRelativePrespective())
@@ -53,7 +53,7 @@ int main() {
 		else
 			manager->pp->SetSpeed(0.8,0.0);*/
 
-		robot->GetRobotsPosition();
+		//robot->GetRobotsPosition();
 	}
 
 	return 0;

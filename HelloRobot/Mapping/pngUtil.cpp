@@ -100,10 +100,11 @@ char* pngUtil::PadMap(const char* filename, unsigned paddingSize) {
 		}
 
 	string directory = ConfigurationManager::getConfig()->GetMap()->Map_Directory;
-	string newFilePath = directory.append("/newMap.png");
-	char* path = StringHelper::ConvertStringToCharArray(newFilePath);
+	char* path = StringHelper::ConvertStringToCharArray(directory + "/newMap.png");
 	encodeOneStep(path, image, width, height);
-	return StringHelper::ConvertStringToCharArray(newFilePath);;
+
+	char* pathToReturn = StringHelper::ConvertStringToCharArray(directory + "/newMap.png");
+	return pathToReturn;
 }
 
 
