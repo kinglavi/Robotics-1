@@ -11,6 +11,7 @@
 #include <ctime>
 #include <stdio.h>
 #include "../Mapping/Cell.h"
+#include "../Mapping/Grid.h"
 using namespace Mapping;
 
 using namespace std;
@@ -53,7 +54,7 @@ class CellNode
         int getyPos() const {return yPos;}
         int getLevel() const {return level;}
         int getPriority() const {return priority;}
-        int getInnerCell() const {return innerCell;}
+        Cell* getInnerCell() const {return innerCell;}
 
         void updatePriority(Cell* otherCell)
         {
