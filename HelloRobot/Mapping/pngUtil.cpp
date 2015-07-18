@@ -93,18 +93,17 @@ char* pngUtil::PadMap(const char* filename, unsigned paddingSize) {
 
 	for (y = 0; y < height; y++)
 		for (x = 0; x < width; x++) {
-			image[y * 4 + x * 4 + 0] = paddedImage[(y * paddingSize) * 4 + (x + paddingSize) * 4 + 0];
-			image[y * 4 + x * 4 + 1] = paddedImage[(y * paddingSize) * 4 + (x + paddingSize) * 4 + 1];
-			image[y * 4 + x * 4 + 2] = paddedImage[(y * paddingSize) * 4 + (x + paddingSize) * 4 + 2];
-			image[y * 4 + x * 4 + 3] = paddedImage[(y * paddingSize) * 4 + (x + paddingSize) * 4 + 3];
+			image[y * width * 4 + x * 4 + 0] = paddedImage[(y * paddedWidth + paddingSize) * 4 + (x + paddingSize) * 4 + 0];
+			image[y * width * 4 + x * 4 + 1] = paddedImage[(y * paddedWidth + paddingSize) * 4 + (x + paddingSize) * 4 + 1];
+			image[y * width * 4 + x * 4 + 2] = paddedImage[(y * paddedWidth + paddingSize) * 4 + (x + paddingSize) * 4 + 2];
+			image[y * width * 4 + x * 4 + 3] = paddedImage[(y * paddedWidth + paddingSize) * 4 + (x + paddingSize) * 4 + 3];
 		}
 
 	string directory = ConfigurationManager::getConfig()->GetMap()->Map_Directory;
-	char* path = StringHelper::ConvertStringToCharArray(directory + "/newMap.png");
+	string newFilePath = directory.append("/newMap.png");
+	char* path = StringHelper::ConvertStringToCharArray(newFilePath);
 	encodeOneStep(path, image, width, height);
-
-	char* pathToReturn = StringHelper::ConvertStringToCharArray(directory + "/newMap.png");
-	return pathToReturn;
+	return StringHelper::ConvertStringToCharArray(newFilePath);;
 }
 
 
