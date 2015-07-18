@@ -24,16 +24,16 @@ PathCreator::~PathCreator() {
 
 vector<Cell*> PathCreator::CreatePath(Cell* start, Cell* dest) {
 	PutWeights();
-	ConfigurationManager::getConfig()->GetMap()->PrintGrid();
+	ConfigurationManager::Instance()->GetMap()->PrintGrid();
 	string strPath = A_Star::pathFind(start, dest); // still unchecked
 	vector<Cell*> path; //the raw pixels
 	return path;
 }
 
 void PathCreator::PutWeights() {
-	vector<vector<Cell*> > grid = ConfigurationManager::getConfig()->GetMap()->Grid;
-	unsigned cols = ConfigurationManager::getConfig()->GetMap()->Grid_Width;
-	unsigned rows = ConfigurationManager::getConfig()->GetMap()->Grid_Height;
+	vector<vector<Cell*> > grid = ConfigurationManager::Instance()->GetMap()->Grid;
+	unsigned cols = ConfigurationManager::Instance()->GetMap()->Grid_Width;
+	unsigned rows = ConfigurationManager::Instance()->GetMap()->Grid_Height;
 	vector<Cell*> cellsToColorNextTime;
 	vector<Cell*> cellsToColorThisTime;
 	for (int i = 0; i < rows; i++)
@@ -78,8 +78,8 @@ void PathCreator::PutWeights() {
 
 bool PathCreator::IsStraitApprocah(Coordinates StartCoordinateInCM, Coordinates EndCoordinateInCM)
 {
-		Map* map = ConfigurationManager::getConfig()->GetMap();
-		vector<vector<Cell*> > grid = ConfigurationManager::getConfig()->GetMap()->Grid;
+		Map* map = ConfigurationManager::Instance()->GetMap();
+		vector<vector<Cell*> > grid = ConfigurationManager::Instance()->GetMap()->Grid;
 
 		// Checks the angle of the two locations.
 		bool isBluntAngle = (fabs(EndCoordinateInCM.Y - StartCoordinateInCM.Y) > fabs(EndCoordinateInCM.X - StartCoordinateInCM.X));

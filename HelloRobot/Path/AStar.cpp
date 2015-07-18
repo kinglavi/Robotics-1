@@ -103,7 +103,7 @@ bool operator<(const CellNode & a, const CellNode & b)
 // The route returned is a string of direction digits.
 string A_Star::pathFind(Cell* startCell, Cell* finishCell)
 {
-	vector<vector<Cell*> > grid = ConfigurationManager::getConfig()->GetMap()->Grid;
+	vector<vector<Cell*> > grid = ConfigurationManager::Instance()->GetMap()->Grid;
     static priority_queue<CellNode> pq[2]; // list of open (not-yet-tried) nodes
     static int pqi; // pq index
     static CellNode* n0;

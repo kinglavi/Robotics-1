@@ -13,9 +13,9 @@ namespace Mapping {
 
 Grid::Grid() {
 	// TODO Auto-generated constructor stub
-	double width = ConfigurationManager::getConfig()->GetMap()->Map_X_Cm();
-	double height = ConfigurationManager::getConfig()->GetMap()->Map_Y_Cm();
-	double CmsToCell =ConfigurationManager::getConfig()->GetMap()->GridResolutionCM;
+	double width = ConfigurationManager::Instance()->GetMap()->Map_X_Cm();
+	double height = ConfigurationManager::Instance()->GetMap()->Map_Y_Cm();
+	double CmsToCell =ConfigurationManager::Instance()->GetMap()->GridResolutionCM;
 	RowsCount = height/CmsToCell;
 	ColumnsCount = width/CmsToCell;
 	Cells.resize(RowsCount);

@@ -23,7 +23,7 @@ namespace Common {
 class ConfigurationManager {
 public:
 	virtual ~ConfigurationManager();
-	static ConfigurationManager* getConfig();
+	static ConfigurationManager* Instance();
 
 	// Start Location
 	int GetStartX(){return Start_X;}

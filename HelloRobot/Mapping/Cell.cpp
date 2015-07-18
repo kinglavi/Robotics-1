@@ -48,7 +48,7 @@ namespace Mapping {
 	}
 
 	Coordinates* Cell::getWorldLocationCm() const {
-		int resolution = ConfigurationManager::getConfig()->GetMap()->GridResolutionCM;
+		int resolution = ConfigurationManager::Instance()->GetMap()->GridResolutionCM;
 		double x_cm = m_Col * resolution;
 		double y_cm = m_Row * resolution;
 

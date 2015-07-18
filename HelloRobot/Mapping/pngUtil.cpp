@@ -99,7 +99,7 @@ char* pngUtil::PadMap(const char* filename, unsigned paddingSize) {
 			image[y * width * 4 + x * 4 + 3] = paddedImage[(y * paddedWidth + paddingSize) * 4 + (x + paddingSize) * 4 + 3];
 		}
 
-	string directory = ConfigurationManager::getConfig()->GetMap()->Map_Directory;
+	string directory = ConfigurationManager::Instance()->GetMap()->Map_Directory;
 	char* path = StringHelper::ConvertStringToCharArray(directory + "/newMap.png");
 	encodeOneStep(path, image, width, height);
 

@@ -18,24 +18,24 @@ using namespace Common;
 using namespace Path;
 
 int main() {
-	double mapRes = ConfigurationManager::getConfig()->GetMap()->Cm_To_Pixel_Ratio;
-	double robotSize = ConfigurationManager::getConfig()->GetRobot()->Width;
-	string path = ConfigurationManager::getConfig()->GetMap()->Map_Path;
+	double mapRes = ConfigurationManager::Instance()->GetMap()->Cm_To_Pixel_Ratio;
+	double robotSize = ConfigurationManager::Instance()->GetRobot()->Width;
+	string path = ConfigurationManager::Instance()->GetMap()->Map_Path;
 
-	ConfigurationManager::getConfig()->GetMap()->CreateGrid(((robotSize/2)/mapRes));
+	ConfigurationManager::Instance()->GetMap()->CreateGrid(((robotSize/2)/mapRes));
 
-	int startX = ConfigurationManager::getConfig()->GetStartX();
-	int startY = ConfigurationManager::getConfig()->GetStartY();
-	Cell* startCell = ConfigurationManager::getConfig()->GetMap()->getCellFromLocation(startX, startY);
-	int finishX = ConfigurationManager::getConfig()->GetGoalX();
-	int finishY = ConfigurationManager::getConfig()->GetGoalY();
-	Cell* goalCell = ConfigurationManager::getConfig()->GetMap()->getCellFromLocation(finishX, finishY);
+	int startX = ConfigurationManager::Instance()->GetStartX();
+	int startY = ConfigurationManager::Instance()->GetStartY();
+	Cell* startCell = ConfigurationManager::Instance()->GetMap()->getCellFromLocation(startX, startY);
+	int finishX = ConfigurationManager::Instance()->GetGoalX();
+	int finishY = ConfigurationManager::Instance()->GetGoalY();
+	Cell* goalCell = ConfigurationManager::Instance()->GetMap()->getCellFromLocation(finishX, finishY);
 
 	PathCreator* creator = new PathCreator();
 	vector<Cell*> robotPath = creator->CreatePath(startCell, goalCell);
 
 	MovementManager* manager = new MovementManager();
-	Robot* robot = ConfigurationManager::getConfig()->GetRobot();
+	Robot* robot = ConfigurationManager::Instance()->GetRobot();
 	vector<Obstacle*> obs = manager->GetRelativePrespective();
 	vector<Obstacle*>::iterator i;
 
