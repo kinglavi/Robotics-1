@@ -70,7 +70,7 @@ void Map::Initialize(unsigned height, unsigned width)
 	}
 }
 
-void Map::CreateGrid(unsigned paddingSize, int MapResolutionCM, int GridResolutionCM)
+void Map::CreateGrid(unsigned paddingSize, double MapResolutionCM, double GridResolutionCM)
 {
 	char* path = StringHelper::ConvertStringToCharArray(this->Map_Path);
 	char* filename = pngUtil::PadMap(path, paddingSize);
@@ -81,16 +81,15 @@ void Map::CreateGrid(unsigned paddingSize, int MapResolutionCM, int GridResoluti
 
 	unsigned error = lodepng::decode(image, width, height, filename);
 
-	int gridHeight = height/PixelsToCell;
-	int gridWidth = width/PixelsToCell;
+	Grid_Height= height/PixelsToCell;
+	Grid_Width = width/PixelsToCell;
 
-	Initialize(gridHeight, gridWidth);
+	Initialize(Grid_Height, Grid_Width);
+	PrintGrid();
 
-	int x, y;
-
-	for (int row = 0; row < gridHeight; row++)
+	for (int row = 0; row < Grid_Height; row++)
 	{
-			for (int col = 0; col < gridWidth; col++)
+			for (int col = 0; col < Grid_Width; col++)
 			{
 				Cell* cell = getCell(row, col);
 

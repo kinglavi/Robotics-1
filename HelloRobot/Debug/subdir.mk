@@ -5,18 +5,21 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
 ../Obstacle.cpp \
+../Particle.cpp \
 ../Position.cpp \
 ../Robot.cpp \
 ../main.cpp 
 
 OBJS += \
 ./Obstacle.o \
+./Particle.o \
 ./Position.o \
 ./Robot.o \
 ./main.o 
 
 CPP_DEPS += \
 ./Obstacle.d \
+./Particle.d \
 ./Position.d \
 ./Robot.d \
 ./main.d 
