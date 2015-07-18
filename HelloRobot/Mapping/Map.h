@@ -13,6 +13,16 @@ using namespace std;
 
 class Map {
 public:
+	// Consts
+	#define R_OFFSET 0
+	#define G_OFFSET 1
+	#define B_OFFSET 2
+	#define A_OFFSET 3
+
+	static const unsigned COLOR_BLACK = 0;
+	static const unsigned COLOR_WHITE = 255;
+	static const int COLOR_INVALID = -1;
+
 	static const unsigned IMAGE_COLOR_CLEAR = 255; // WHITE
 	static const unsigned IMAGE_COLOR_OBSTACLE = 0; // BLACK
 
@@ -27,12 +37,16 @@ public:
 	double Map_X_Cm();
 	double Map_Y_Cm();
 	vector<unsigned char> image;
+	void CreateGrid(unsigned paddingSize, int MapResolutionCM, int GridResolutionCM);
 
+	private:
 	// Utility Methods
-	unsigned getCellImageColor(unsigned row, unsigned col,
+	static unsigned getCellImageColor(unsigned row, unsigned col,
 			const vector<unsigned char>& rawImage,
 			unsigned imageWidth, unsigned imageHeight,
-	        unsigned pixelsPerOneGrid);
+			unsigned pixelsPerOneGrid);
+
+
 };
 
 #endif /* MAP_H_ */
