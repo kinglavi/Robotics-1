@@ -8,6 +8,8 @@
 #include "loadpng.h"
 #include <math.h>
 
+using namespace Common;
+
 //Encode from raw pixels to disk with a single function call
 //The image argument has width * height RGBA pixels or width * height * 4 bytes
 void pngUtil::encodeOneStep(const char* filename, std::vector<unsigned char> image,
@@ -95,7 +97,8 @@ void pngUtil::PadMap(const char* filename, unsigned paddingSize) {
 			}
 		}
 
-	encodeOneStep("/home/colman/Desktop/Robotics/Robotics/HelloRobot/newMap.png", paddedImage, paddedWidth, paddedHeight);
+	char* path = StringHelper::ConvertStringToCharArray(ConfigurationManager::getConfig()->GetMap()->Map_Directory + "/newMap.png");
+	encodeOneStep(path, paddedImage, paddedWidth, paddedHeight);
 }
 
 void pngUtil::CreateGrid(const char* filename, unsigned paddingSize, int MapResolutionCM, int GridResolutionCM)

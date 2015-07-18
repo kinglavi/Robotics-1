@@ -14,8 +14,10 @@ main.d: ../main.cpp \
  /usr/local/include/player-2.0/libplayerc++/clientproxy.h \
  ../Common/MovementManager.h ../Common/../Position.h \
  ../Common/../Obstacle.h ../Mapping/pngUtil.h \
- ../Common/ConfigurationManager.h ../Common/../Robot.h \
- ../Common/../Mapping/Map.h
+ ../Mapping/../Common/ConfigurationManager.h \
+ ../Mapping/../Common/../Mapping/Map.h ../Mapping/../Common/../Robot.h \
+ ../Mapping/../Common/StringHelper.h ../Common/StringHelper.h \
+ ../Common/ConfigurationManager.h
 
 /usr/local/include/player-2.0/libplayerc++/playerc++.h:
 
@@ -51,8 +53,14 @@ main.d: ../main.cpp \
 
 ../Mapping/pngUtil.h:
 
+../Mapping/../Common/ConfigurationManager.h:
+
+../Mapping/../Common/../Mapping/Map.h:
+
+../Mapping/../Common/../Robot.h:
+
+../Mapping/../Common/StringHelper.h:
+
+../Common/StringHelper.h:
+
 ../Common/ConfigurationManager.h:
-
-../Common/../Robot.h:
-
-../Common/../Mapping/Map.h:

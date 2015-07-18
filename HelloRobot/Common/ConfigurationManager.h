@@ -12,10 +12,11 @@
 #include <iostream>
 #include <string.h>
 #include <fstream>
-#include "../Robot.h"
 #include "../Mapping/Map.h"
-using namespace std;
+#include "../Robot.h"
 
+using namespace std;
+class Map;
 namespace Common {
 
 class ConfigurationManager {
@@ -57,7 +58,7 @@ private:
 	Map* map;
 
 	int str2int(const char* str, int h);
-	char* ConvertStringToCharArray(string string);
+
 };
 
 } /* namespace Common */

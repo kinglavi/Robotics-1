@@ -3,7 +3,10 @@
 #include <iostream>
 #include <vector>
 #include <math.h>
-
+#include <string.h>
+#include "../Common/ConfigurationManager.h"
+#include "../Common/StringHelper.h"
+using namespace std;
 
 class pngUtil {
 	public:

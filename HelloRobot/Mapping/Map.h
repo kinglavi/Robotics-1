@@ -18,6 +18,7 @@ public:
 
 	Map();
 	string Map_Path;
+	string Map_Directory;
 	int X_Pixles;
 	int Y_Pixles;
 	double Cm_To_Pixel_Ratio;

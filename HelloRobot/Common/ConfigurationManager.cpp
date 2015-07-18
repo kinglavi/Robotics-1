@@ -6,6 +6,7 @@
  */
 
 #include "ConfigurationManager.h"
+#include "StringHelper.h"
 #include <sstream>
 #include <string>
 
@@ -16,7 +17,7 @@ ConfigurationManager* ConfigurationManager::m_Config = NULL;
 ConfigurationManager::ConfigurationManager() {
 	map = new Map();
 	robot = new Robot();
-	ReadFile("/home/colman/Desktop/Robotics/Robotics/HelloRobot/configuration.txt");
+	ReadFile("/home/colman/Desktop/proj/Robotics/HelloRobot/configuration.txt");
 }
 
 ConfigurationManager::~ConfigurationManager() {
@@ -30,18 +31,11 @@ ConfigurationManager* ConfigurationManager::getConfig() {
 
 	return m_Config;
 }
-char* ConfigurationManager::ConvertStringToCharArray(string string)
-{
-	char converted[1024];
-	strncpy(converted, string.c_str(), sizeof(converted));
-	converted[sizeof(converted) - 1] = 0;
-	return converted;
-}
 
 void ConfigurationManager::ReadFile(string path)
 {
 	string line;
-	ifstream myfile (ConvertStringToCharArray(path));
+	ifstream myfile (StringHelper::ConvertStringToCharArray(path));
 
 	if (myfile.is_open())
 	{
@@ -62,9 +56,10 @@ void ConfigurationManager::ParseLine(string line)
 	string key = line.substr(0, line.find(delimiter));
 	string value = line.substr(line.find(delimiter) + 2, line.size());
 
-	if(key == "Map")
+	if(key == "map")
 	{
 		map->Map_Path = value;
+		map->Map_Directory = value.substr(0, value.find_last_of('/'));
 	}
 	else if(key == "startLocation")
 	{
