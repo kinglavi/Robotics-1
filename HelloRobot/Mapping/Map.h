@@ -47,6 +47,7 @@ public:
 	Cell* getCell(int row, int col) const;
 	Cell* getCellFromLocation(int row, int col) const;
 	bool isInRange(int row, int col) const;
+	Cell* CmCoordinateToCell(double x, double y) const;
 	void PrintGrid();
 	private:
 	// Utility Methods

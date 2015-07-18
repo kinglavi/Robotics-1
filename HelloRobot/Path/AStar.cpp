@@ -98,6 +98,7 @@ bool operator<(const CellNode & a, const CellNode & b)
 // The route returned is a string of direction digits.
 string A_Star::pathFind(Cell* startCell, Cell* finishCell)
 {
+<<<<<<< HEAD
 	vector<vector<Cell*> > grid = ConfigurationManager::getConfig()->GetMap()->Grid;
 
 	int n=ConfigurationManager::getConfig()->GetMap()->Grid_Height; // horizontal size of the map
@@ -112,6 +113,15 @@ string A_Star::pathFind(Cell* startCell, Cell* finishCell)
     CellNode* m0;
     int i, j, x, y, xdx, ydy;
     char c;
+=======
+	vector<vector<Cell*> > grid = ConfigurationManager::Instance()->GetMap()->Grid;
+    static priority_queue<CellNode> pq[2]; // list of open (not-yet-tried) nodes
+    static int pqi; // pq index
+    static CellNode* n0;
+    static CellNode* m0;
+    static int i, j, x, y, xdx, ydy;
+    static char c;
+>>>>>>> branch 'master' of https://github.com/mkobi/Robotics.git
     pqi=0;
 
     // reset the node maps

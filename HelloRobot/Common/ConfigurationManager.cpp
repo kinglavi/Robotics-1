@@ -24,7 +24,7 @@ ConfigurationManager::~ConfigurationManager() {
 	delete m_Config;
 	m_Config = NULL;
 }
-ConfigurationManager* ConfigurationManager::getConfig() {
+ConfigurationManager* ConfigurationManager::Instance() {
 	if (!m_Config) {
 		m_Config = new ConfigurationManager();
 	}

@@ -107,8 +107,8 @@ void Map::Initialize(unsigned height, unsigned width)
 
 void Map::CreateGrid(unsigned paddingSize)
 {
-	double gridRes = ConfigurationManager::getConfig()->GetMap()->GridResolutionCM;
-	double mapRes = ConfigurationManager::getConfig()->GetMap()->Cm_To_Pixel_Ratio;
+	double gridRes = ConfigurationManager::Instance()->GetMap()->GridResolutionCM;
+	double mapRes = ConfigurationManager::Instance()->GetMap()->Cm_To_Pixel_Ratio;
 	char* path = StringHelper::ConvertStringToCharArray(this->Map_Path);
 	char* filename = pngUtil::PadMap(path, paddingSize);
 	double PixelsToCell = gridRes/mapRes;
@@ -153,8 +153,8 @@ void Map::CreateGrid(unsigned paddingSize)
 
 	Cell* Map::getCellFromLocation(int row, int col) const
 	{
-		double gridRes = ConfigurationManager::getConfig()->GetMap()->GridResolutionCM;
-		double mapRes = ConfigurationManager::getConfig()->GetMap()->Cm_To_Pixel_Ratio;
+		double gridRes = ConfigurationManager::Instance()->GetMap()->GridResolutionCM;
+		double mapRes = ConfigurationManager::Instance()->GetMap()->Cm_To_Pixel_Ratio;
 		double PixelsToCell = gridRes/mapRes;
 		row = row/PixelsToCell;
 		col = col/PixelsToCell;
@@ -193,4 +193,12 @@ void Map::CreateGrid(unsigned paddingSize)
 		cout << endl;
 		cout << endl;
 	}
+	Cell* Map::CmCoordinateToCell(double x, double y) const {
+			float cmPerGridCell = ConfigurationManager::Instance()->GetMap()->GridResolutionCM;
+			unsigned row = y / cmPerGridCell;
+			unsigned col = x / cmPerGridCell;
+
+			return getCell(row, col);
+		}
+
 }

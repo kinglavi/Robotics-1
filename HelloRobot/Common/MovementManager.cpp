@@ -25,7 +25,7 @@ double MovementManager::GetLazerAngle(int lazerReadingIndex)
 vector<Obstacle*> MovementManager::GetRelativePrespective()
 {
 	vector<Obstacle*> obstacles;
-	LaserProxy* lp = ConfigurationManager::getConfig()->GetRobot()->laserProxy;
+	LaserProxy* lp = ConfigurationManager::Instance()->GetRobot()->laserProxy;
 
 	// Getting only the relevant readings in front of the robot.
 	for (int i=0; i<666; i++)
