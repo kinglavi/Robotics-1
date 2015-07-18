@@ -15,6 +15,7 @@
 #include "Position.h"
 
 using namespace PlayerCc;
+using namespace std;
 
 class Robot {
 public:

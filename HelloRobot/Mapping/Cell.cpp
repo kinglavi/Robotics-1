@@ -8,7 +8,8 @@ using namespace Common;
 namespace Mapping {
 
 	const unsigned Cell::NUM_NEIGHBORS = 8;
-	const double Cell::COST_UNWALKABLE = DBL_MAX;
+	//const double Cell::COST_UNWALKABLE = DBL_MAX;
+	const double Cell::COST_UNWALKABLE = 0;
 	const double Cell::COST_CLEAR = 1;
 	const double Cell::COST_NEAR_WALL_LAYER1 = 6;
 	const double Cell::COST_NEAR_WALL_LAYER2 = 5;
