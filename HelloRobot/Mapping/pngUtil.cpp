@@ -6,8 +6,10 @@
  */
 #include "pngUtil.h"
 #include "loadpng.h"
+#include "../Mapping/Cell.h"
 #include <math.h>
 
+using namespace Mapping;
 using namespace Common;
 
 //Encode from raw pixels to disk with a single function call
@@ -69,16 +71,8 @@ char* pngUtil::PadMap(const char* filename, unsigned paddingSize) {
 			paddedImage[y * (paddedWidth * 4) + (x * 4 + 3)] = 255;
 		}
 
-
-
 	for (y = 0; y < height; y++)
 		for (x = 0; x < width; x++) {
-//			if (image[y * width * 4 + x * 4 + 0]
-//					|| image[((y + paddingSize) * (width + paddingSize*2) * 4) + (x + (paddingSize) * 4 + 1)]
-//					|| image[(y + paddingSize) * (width + paddingSize*2) * 4 + (x+paddingSize) * 4 + 2])
-//				color = 0;
-//			else
-//				color = 255;
 			if (image[y * width * 4 + x * 4 + 0] == 0 && image[y * width * 4 + x * 4 + 1] == 0 && image[y * width * 4 + x * 4 + 2] == 0)
 			{
 				for (innerX = x; innerX <= x +(paddingSize*2); innerX++)
@@ -97,39 +91,15 @@ char* pngUtil::PadMap(const char* filename, unsigned paddingSize) {
 			}
 		}
 
-	char* path = StringHelper::ConvertStringToCharArray(ConfigurationManager::getConfig()->GetMap()->Map_Directory + "/newMap.png");
+	string directory = ConfigurationManager::getConfig()->GetMap()->Map_Directory;
+	char* path = StringHelper::ConvertStringToCharArray(directory + "/newMap.png");
 	encodeOneStep(path, paddedImage, paddedWidth, paddedHeight);
 
-	return path;
+	char* pathToReturn = StringHelper::ConvertStringToCharArray(directory + "/newMap.png");
+	return pathToReturn;
 }
 
-void pngUtil::CreateGrid(unsigned paddingSize, int MapResolutionCM, int GridResolutionCM)
-{
-	char* filename = PadMap(filename, paddingSize);
-	double PixelsToCell = GridResolutionCM/MapResolutionCM;
-	unsigned width, height;
 
-	std::vector<unsigned char> image;
-
-	unsigned error = lodepng::decode(image, width, height, filename);
-
-	int gridHeight = height/PixelsToCell;
-	int gridWidth = width/PixelsToCell;
-
-	unsigned char map [gridHeight][gridHeight];
-
-	unsigned x, y;
-
-	for (x = 0; x < height; x+=PixelsToCell)
-			for (y = 0; y < width; y+=PixelsToCell)
-			{
-				image[y * (width * 4) + (x * 4 + 0)] = 255;
-				image[y * (width * 4) + (x * 4 + 1)] = 255;
-				image[y * (width * 4) + (x * 4 + 2)] = 255;
-				image[y * (width * 4) + (x * 4 + 3)] = 255;
-			}
-
-}
 
 unsigned char pngUtil::getPixelColor(const std::vector<unsigned char>& rawImage, unsigned width, unsigned height, unsigned row, unsigned col) {
 	unsigned basePos = row * width * 4 + col * 4;

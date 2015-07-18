@@ -16,7 +16,8 @@
 #include "../Robot.h"
 
 using namespace std;
-class Map;
+using namespace Mapping;
+
 namespace Common {
 
 class ConfigurationManager {

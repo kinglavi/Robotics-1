@@ -13,14 +13,13 @@
 using namespace Common;
 
 int main() {
-	pngUtil* util = new pngUtil();
 	double gridRes = ConfigurationManager::getConfig()->GetMap()->GridResolutionCM;
 	double mapRes = ConfigurationManager::getConfig()->GetMap()->Cm_To_Pixel_Ratio;
 	double robotSize = ConfigurationManager::getConfig()->GetRobot()->Width;
 	string path = ConfigurationManager::getConfig()->GetMap()->Map_Path;
 	const char* filename = StringHelper::ConvertStringToCharArray(path);
 
-	util->CreateGrid((1/mapRes)*(robotSize/2), mapRes, gridRes);
+	ConfigurationManager::getConfig()->GetMap()->CreateGrid((1/mapRes)*(robotSize/2), mapRes, gridRes);
 
 	MovementManager* manager = new MovementManager();
 
