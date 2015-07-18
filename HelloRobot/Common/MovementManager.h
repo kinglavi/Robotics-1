@@ -28,10 +28,6 @@ public:
 	double GetLazerAngle(int lazerReadingIndex);
 	double getAlpha();
 	double getBeta();
-
-	PlayerClient* pc;
-	LaserProxy* lp;
-	Position2dProxy* pp;
 };
 
 

@@ -1,12 +1,4 @@
-/*
- * Map.cpp
- *
- *  Created on: Jun 16, 2015
- *      Author: colman
- */
-
 #include <vector>
-
 #include "../Mapping/Cell.h"
 #include "../Common/ConfigurationManager.h"
 #include "pngUtil.h"
@@ -85,7 +77,6 @@ void Map::CreateGrid(unsigned paddingSize, double MapResolutionCM, double GridRe
 	Grid_Width = width/PixelsToCell;
 
 	Initialize(Grid_Height, Grid_Width);
-	PrintGrid();
 
 	for (int row = 0; row < Grid_Height; row++)
 	{
@@ -125,7 +116,7 @@ void Map::CreateGrid(unsigned paddingSize, double MapResolutionCM, double GridRe
 		for (unsigned i = 0; i < Grid_Height; i++)
 		{
 			cout << endl;
-			for (unsigned j = 0; j < Grid_Height; j++)
+			for (unsigned j = 0; j < Grid_Width; j++)
 			{
 				cout << (int)Grid[i][j]->getCost();
 			}

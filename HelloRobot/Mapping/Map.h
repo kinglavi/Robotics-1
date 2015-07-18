@@ -1,10 +1,3 @@
-/*
- * Map.h
- *
- *  Created on: Jun 16, 2015
- *      Author: colman
- */
-
 #ifndef MAP_H_
 #define MAP_H_
 #include "loadpng.h"

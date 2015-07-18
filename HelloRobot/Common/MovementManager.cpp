@@ -6,19 +6,15 @@
  */
 
 #include "MovementManager.h"
+#include "ConfigurationManager.h"
 
-MovementManager::MovementManager() {
-	pc = new PlayerClient("localhost", 6665);
-	lp = new LaserProxy(pc);
-	pp = new Position2dProxy(pc);
+using namespace Common;
 
-	Position* pos = GetRobotsPosition();
-	pp->SetOdometry(pos->x,pos->y,pos->yaw);
-}
+MovementManager::MovementManager() {}
 
 void MovementManager::GetObastaclePosition()
 {
-	Position* pos = GetRobotsPosition();
+
 }
 
 double MovementManager::GetLazerAngle(int lazerReadingIndex)
@@ -29,6 +25,7 @@ double MovementManager::GetLazerAngle(int lazerReadingIndex)
 vector<Obstacle*> MovementManager::GetRelativePrespective()
 {
 	vector<Obstacle*> obstacles;
+	LaserProxy* lp = ConfigurationManager::getConfig()->GetRobot()->laserProxy;
 
 	// Getting only the relevant readings in front of the robot.
 	for (int i=0; i<666; i++)
@@ -41,20 +38,6 @@ vector<Obstacle*> MovementManager::GetRelativePrespective()
 	}
 
 	return obstacles;
-}
-
-Position* MovementManager::GetRobotsPosition()
-{
-	double x = pp->GetXPos();
-	double y = pp->GetYPos();
-	double yaw = pp->GetYaw();
-
-	Position* position = new Position(x,y,yaw);
-
-	cout << "position: (" << x << "," << y << "," <<
-	yaw << ")" << endl;
-
-	return position;
 }
 
 double MovementManager::getAlpha()

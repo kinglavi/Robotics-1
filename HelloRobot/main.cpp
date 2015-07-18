@@ -22,7 +22,7 @@ int main() {
 	ConfigurationManager::getConfig()->GetMap()->CreateGrid((1/mapRes)*(robotSize/2), mapRes, gridRes);
 
 	MovementManager* manager = new MovementManager();
-
+	Robot* robot = ConfigurationManager::getConfig()->GetRobot();
 	vector<Obstacle*> obs = manager->GetRelativePrespective();
 	vector<Obstacle*>::iterator i;
 
@@ -32,7 +32,7 @@ int main() {
 	}
 
 	while (true) {
-		manager->pc->Read();
+		robot->playerClient->Read();
 
 
 /*		if(manager->GetRelativePrespective())
@@ -40,7 +40,7 @@ int main() {
 		else
 			manager->pp->SetSpeed(0.8,0.0);*/
 
-		manager->GetRobotsPosition();
+		robot->GetRobotsPosition();
 	}
 
 	return 0;
