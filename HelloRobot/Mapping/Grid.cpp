@@ -11,6 +11,8 @@ namespace Mapping {
 
 Grid::Grid(unsigned rows, unsigned columns) {
 	// TODO Auto-generated constructor stub
+	RowsCount = rows;
+	ColumnsCount = columns;
 	Cells = new Cell**[rows];
 	for(int i = 0; i < rows; ++i)
 		Cells[i] = new Cell*[columns];

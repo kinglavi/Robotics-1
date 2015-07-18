@@ -16,6 +16,8 @@ public:
 	Grid(unsigned rows, unsigned columns);
 	virtual ~Grid();
 	Cell*** Cells;
+	unsigned RowsCount;
+	unsigned ColumnsCount;
 };
 
 } /* namespace Path */
