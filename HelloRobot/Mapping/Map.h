@@ -45,7 +45,7 @@ public:
 	double Map_X_Cm();
 	double Map_Y_Cm();
 	vector<unsigned char> image;
-	void CreateGrid(unsigned paddingSize, int MapResolutionCM, int GridResolutionCM);
+	void CreateGrid(unsigned paddingSize, double MapResolutionCM, double GridResolutionCM);
 	void Initialize(unsigned height, unsigned width);
 	vector<vector<Cell*> > Grid;
 	vector<vector<char> > GridChar;
