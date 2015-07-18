@@ -21,3 +21,9 @@
 *.exe
 *.out
 *.app
+#Folders
+/Debug/
+/Debug
+Debug/
+**/Debug/**
+
