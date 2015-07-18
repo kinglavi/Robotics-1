@@ -76,35 +76,35 @@ void PathCreator::PutWeights() {
 	}
 }
 
-bool PathCreator::IsStraitApprocah(Coordinates StartCoordinateInCM, Coordinates EndCoordinateInCM)
+bool PathCreator::IsStraitApprocah(Coordinates* StartCoordinateInCM, Coordinates* EndCoordinateInCM)
 {
 		Map* map = ConfigurationManager::Instance()->GetMap();
 		vector<vector<Cell*> > grid = ConfigurationManager::Instance()->GetMap()->Grid;
 
 		// Checks the angle of the two locations.
-		bool isBluntAngle = (fabs(EndCoordinateInCM.Y - StartCoordinateInCM.Y) > fabs(EndCoordinateInCM.X - StartCoordinateInCM.X));
+		bool isBluntAngle = (fabs(EndCoordinateInCM->Y - StartCoordinateInCM->Y) > fabs(EndCoordinateInCM->X - StartCoordinateInCM->X));
 		if (isBluntAngle) {
-			swap(StartCoordinateInCM.X, StartCoordinateInCM.Y);
-			swap(EndCoordinateInCM.X, EndCoordinateInCM.Y);
+			swap(StartCoordinateInCM->X, StartCoordinateInCM->Y);
+			swap(EndCoordinateInCM->X, EndCoordinateInCM->Y);
 		}
 
 		// Makes the higher valued coordinate in the end location.
-		if (StartCoordinateInCM.X > EndCoordinateInCM.X) {
-			swap(StartCoordinateInCM.X, EndCoordinateInCM.X);
-			swap(StartCoordinateInCM.Y, EndCoordinateInCM.Y);
+		if (StartCoordinateInCM->X > EndCoordinateInCM->X) {
+			swap(StartCoordinateInCM->X, EndCoordinateInCM->X);
+			swap(StartCoordinateInCM->Y, EndCoordinateInCM->Y);
 		}
 
-		float xDelta = EndCoordinateInCM.X - StartCoordinateInCM.X;
-		float yDelta = fabs(EndCoordinateInCM.Y - StartCoordinateInCM.Y);
+		float xDelta = EndCoordinateInCM->X - StartCoordinateInCM->X;
+		float yDelta = fabs(EndCoordinateInCM->Y - StartCoordinateInCM->Y);
 
 		float error = xDelta / 2.0f;
-		int yStep = (StartCoordinateInCM.Y < EndCoordinateInCM.Y) ? 1 : -1;
-		int y = (int) StartCoordinateInCM.Y;
+		int yStep = (StartCoordinateInCM->Y < EndCoordinateInCM->Y) ? 1 : -1;
+		int y = (int) StartCoordinateInCM->Y;
 
-		int maxX = (int) EndCoordinateInCM.X;
+		int maxX = (int) EndCoordinateInCM->X;
 
 		int x;
-		for (x = (int) StartCoordinateInCM.X; x < maxX; x++) {
+		for (x = (int) StartCoordinateInCM->X; x < maxX; x++) {
 			if (isBluntAngle) {
 				if (!map->CmCoordinateToCell(y, x)->isWalkable()) {
 					return false;
@@ -123,6 +123,33 @@ bool PathCreator::IsStraitApprocah(Coordinates StartCoordinateInCM, Coordinates 
 		}
 
 		return true;
+	}
+
+vector<Coordinates*> PathCreator::GetFinalPath(Cell* start, Cell* dest) {
+		vector<Cell*> InitialPath = CreatePath(start, dest);
+/*		if (InitialPath.empty()) {
+			cout << "There is no valid path to destination." << endl;
+			return InitialPath;
+		}*/
+
+		vector<Coordinates*> waypoints;
+		unsigned lastTakenWaypointIndex = 0;
+		for (unsigned waypointIndex = 0; waypointIndex < InitialPath.size(); waypointIndex++) {
+			Coordinates* currentWaypointWorldLocation = InitialPath[waypointIndex]->getWorldLocationCm();
+			if (waypointIndex == 0 || waypointIndex == InitialPath.size() - 1 || waypointIndex - lastTakenWaypointIndex >= MAX_WAYPOINT_SPACING) {
+				lastTakenWaypointIndex = waypointIndex;
+				waypoints.push_back(currentWaypointWorldLocation);
+			} else {
+				Coordinates* lastWaypointWorldLocation = waypoints.back();
+				if (!IsStraitApprocah(lastWaypointWorldLocation, currentWaypointWorldLocation)) {
+					lastTakenWaypointIndex = waypointIndex - 1;
+					Coordinates* lastWaypointWorldLocation = InitialPath[lastTakenWaypointIndex]->getWorldLocationCm();
+					waypoints.push_back(lastWaypointWorldLocation);
+				}
+			}
+		}
+
+		return waypoints;
 	}
 
 } /* namespace Path */

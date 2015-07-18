@@ -13,10 +13,11 @@ namespace Mapping {
 			X(0), Y(0), Yaw(0) {
 	}
 
-	Coordinates::Coordinates(double xCM, double yCM, double yawRad) {
-		X = xCM;
-		Y = yCM;
-		Yaw = yawRad;
+	// In CM
+	Coordinates::Coordinates(double x, double y, double yaw) {
+		X = x;
+		Y = y;
+		Yaw = yaw;
 	}
 
 	ostream& operator<<(ostream& os, Coordinates& coordinate) {
