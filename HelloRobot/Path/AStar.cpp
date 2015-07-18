@@ -10,9 +10,15 @@
 #include <stdlib.h>     /* srand, rand */
 #include <ctime>
 #include <stdio.h>
+
+#include "AStar.h"
+
 #include "../Mapping/Cell.h"
 #include "../Mapping/Grid.h"
 using namespace Mapping;
+
+#include "../Common/ConfigurationManager.h"
+using namespace Common;
 
 using namespace std;
 
@@ -95,8 +101,9 @@ bool operator<(const CellNode & a, const CellNode & b)
 
 // A-star algorithm.
 // The route returned is a string of direction digits.
-string pathFind(Grid* grid, Cell* startCell, Cell* finishCell)
+string A_Star::pathFind(Cell* startCell, Cell* finishCell)
 {
+	vector<vector<Cell*> > grid = ConfigurationManager::getConfig()->GetMap()->Grid;
     static priority_queue<CellNode> pq[2]; // list of open (not-yet-tried) nodes
     static int pqi; // pq index
     static CellNode* n0;
@@ -167,7 +174,7 @@ string pathFind(Grid* grid, Cell* startCell, Cell* finishCell)
                 || closed_nodes_map[xdx][ydy]==1))
             {
                 // generate a child node
-                m0=new CellNode(grid->Cells[xdx][ydy], n0->getLevel(), n0->getPriority());
+                m0=new CellNode(grid[xdx][ydy], n0->getLevel(), n0->getPriority());
                 m0->nextLevel(i);
                 m0->updatePriority(finishCell);
 
@@ -215,88 +222,88 @@ string pathFind(Grid* grid, Cell* startCell, Cell* finishCell)
     }
     return ""; // no route found
 }
-
-int Run()
-{
-    srand(time(NULL));
-
-    // create empty map
-    for(int y=0;y<m;y++)
-    {
-        for(int x=0;x<n;x++) map[x][y]=0;
-    }
-
-    // fillout the map matrix with a '+' pattern
-    for(int x=n/8;x<n*7/8;x++)
-    {
-        map[x][m/2]=1;
-    }
-    for(int y=m/8;y<m*7/8;y++)
-    {
-        map[n/2][y]=1;
-    }
-
-    // randomly select start and finish locations
-    int xA, yA, xB, yB;
-    switch(rand()%8)
-    {
-        case 0: xA=0;yA=0;xB=n-1;yB=m-1; break;
-        case 1: xA=0;yA=m-1;xB=n-1;yB=0; break;
-        case 2: xA=n/2-1;yA=m/2-1;xB=n/2+1;yB=m/2+1; break;
-        case 3: xA=n/2-1;yA=m/2+1;xB=n/2+1;yB=m/2-1; break;
-        case 4: xA=n/2-1;yA=0;xB=n/2+1;yB=m-1; break;
-        case 5: xA=n/2+1;yA=m-1;xB=n/2-1;yB=0; break;
-        case 6: xA=0;yA=m/2-1;xB=n-1;yB=m/2+1; break;
-        case 7: xA=n-1;yA=m/2+1;xB=0;yB=m/2-1; break;
-    }
-
-    cout<<"Map Size (X,Y): "<<n<<","<<m<<endl;
-    cout<<"Start: "<<xA<<","<<yA<<endl;
-    cout<<"Finish: "<<xB<<","<<yB<<endl;
-    // get the route
-    clock_t start = clock();
-    string route=pathFind(new Grid(), new Cell(0,0), new Cell(10, 10));
-    if(route=="") cout<<"An empty route generated!"<<endl;
-    clock_t end = clock();
-    double time_elapsed = double(end - start);
-    cout<<"Time to calculate the route (ms): "<<time_elapsed<<endl;
-    cout<<"Route:"<<endl;
-    cout<<route<<endl<<endl;
-
-    // follow the route on the map and display it
-    if(route.length()>0)
-    {
-        int j; char c;
-        int x=xA;
-        int y=yA;
-        map[x][y]=2;
-        for(int i=0;i<route.length();i++)
-        {
-            c =route.at(i);
-            j=atoi(&c);
-            x=x+dx[j];
-            y=y+dy[j];
-            map[x][y]=3;
-        }
-        map[x][y]=4;
-
-        // display the map with the route
-        for(int y=0;y<m;y++)
-        {
-            for(int x=0;x<n;x++)
-                if(map[x][y]==0)
-                    cout<<".";
-                else if(map[x][y]==1)
-                    cout<<"O"; //obstacle
-                else if(map[x][y]==2)
-                    cout<<"S"; //start
-                else if(map[x][y]==3)
-                    cout<<"R"; //route
-                else if(map[x][y]==4)
-                    cout<<"F"; //finish
-            cout<<endl;
-        }
-    }
-    getchar(); // wait for a (Enter) keypress
-    return(0);
-}
+//
+//int Run()
+//{
+//    srand(time(NULL));
+//
+//    // create empty map
+//    for(int y=0;y<m;y++)
+//    {
+//        for(int x=0;x<n;x++) map[x][y]=0;
+//    }
+//
+//    // fillout the map matrix with a '+' pattern
+//    for(int x=n/8;x<n*7/8;x++)
+//    {
+//        map[x][m/2]=1;
+//    }
+//    for(int y=m/8;y<m*7/8;y++)
+//    {
+//        map[n/2][y]=1;
+//    }
+//
+//    // randomly select start and finish locations
+//    int xA, yA, xB, yB;
+//    switch(rand()%8)
+//    {
+//        case 0: xA=0;yA=0;xB=n-1;yB=m-1; break;
+//        case 1: xA=0;yA=m-1;xB=n-1;yB=0; break;
+//        case 2: xA=n/2-1;yA=m/2-1;xB=n/2+1;yB=m/2+1; break;
+//        case 3: xA=n/2-1;yA=m/2+1;xB=n/2+1;yB=m/2-1; break;
+//        case 4: xA=n/2-1;yA=0;xB=n/2+1;yB=m-1; break;
+//        case 5: xA=n/2+1;yA=m-1;xB=n/2-1;yB=0; break;
+//        case 6: xA=0;yA=m/2-1;xB=n-1;yB=m/2+1; break;
+//        case 7: xA=n-1;yA=m/2+1;xB=0;yB=m/2-1; break;
+//    }
+//
+//    cout<<"Map Size (X,Y): "<<n<<","<<m<<endl;
+//    cout<<"Start: "<<xA<<","<<yA<<endl;
+//    cout<<"Finish: "<<xB<<","<<yB<<endl;
+//    // get the route
+//    clock_t start = clock();
+//    string route=pathFind(new Cell(0,0), new Cell(10, 10));
+//    if(route=="") cout<<"An empty route generated!"<<endl;
+//    clock_t end = clock();
+//    double time_elapsed = double(end - start);
+//    cout<<"Time to calculate the route (ms): "<<time_elapsed<<endl;
+//    cout<<"Route:"<<endl;
+//    cout<<route<<endl<<endl;
+//
+//    // follow the route on the map and display it
+//    if(route.length()>0)
+//    {
+//        int j; char c;
+//        int x=xA;
+//        int y=yA;
+//        map[x][y]=2;
+//        for(int i=0;i<route.length();i++)
+//        {
+//            c =route.at(i);
+//            j=atoi(&c);
+//            x=x+dx[j];
+//            y=y+dy[j];
+//            map[x][y]=3;
+//        }
+//        map[x][y]=4;
+//
+//        // display the map with the route
+//        for(int y=0;y<m;y++)
+//        {
+//            for(int x=0;x<n;x++)
+//                if(map[x][y]==0)
+//                    cout<<".";
+//                else if(map[x][y]==1)
+//                    cout<<"O"; //obstacle
+//                else if(map[x][y]==2)
+//                    cout<<"S"; //start
+//                else if(map[x][y]==3)
+//                    cout<<"R"; //route
+//                else if(map[x][y]==4)
+//                    cout<<"F"; //finish
+//            cout<<endl;
+//        }
+//    }
+//    getchar(); // wait for a (Enter) keypress
+//    return(0);
+//}

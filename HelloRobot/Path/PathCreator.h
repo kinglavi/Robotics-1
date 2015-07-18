@@ -19,8 +19,8 @@ class PathCreator {
 public:
 	PathCreator();
 	virtual ~PathCreator();
-	vector<Cell*> CreatePath(Grid* grid, Cell* start, Cell* dest);
-	void PutWeights(Grid* grid);
+	vector<Cell*> CreatePath(Cell* start, Cell* dest);
+	void PutWeights();
 };
 
 } /* namespace Path */

@@ -3,6 +3,8 @@
 #include "../Common/ConfigurationManager.h"
 #include "pngUtil.h"
 #include "Map.h"
+#include <float.h>
+
 using namespace Common;
 using namespace Mapping;
 
@@ -60,13 +62,56 @@ void Map::Initialize(unsigned height, unsigned width)
 			Grid[i][j] = new Cell(i,j);
 		}
 	}
+
+	for (unsigned i = 0; i < height; i++) {
+		for (unsigned j = 0; j < width; j++) {
+			vector<Cell*> nbrs;
+			// Top
+			if (i != 0) {
+				if (j != 0) {
+					// Top left
+					nbrs.push_back(Grid[i - 1][j - 1]);
+				}
+				// Top middle
+				nbrs.push_back(Grid[i - 1][j]);
+				if (j < width - 1) {
+					// Top right
+					nbrs.push_back(Grid[i - 1][j + 1]);
+				}
+			}
+			if (j < width - 1) {
+				// Middle right
+				nbrs.push_back(Grid[i][j + 1]);
+			}
+			// Bottom
+			if (i < height - 1) {
+				if (j < width - 1) {
+					// Bottom right
+					nbrs.push_back(Grid[i + 1][j + 1]);
+				}
+				// Bottom middle
+				nbrs.push_back(Grid[i + 1][j]);
+				if (j != 0) {
+					// Bottom left
+					nbrs.push_back(Grid[i + 1][j - 1]);
+				}
+			}
+			if (j != 0) {
+				// Middle left
+				nbrs.push_back(Grid[i][j - 1]);
+			}
+			Grid[i][j]->setNeighbors(nbrs);
+		}
+	}
 }
 
-void Map::CreateGrid(unsigned paddingSize, double MapResolutionCM, double GridResolutionCM)
+void Map::CreateGrid(unsigned paddingSize)
 {
+	double gridRes = ConfigurationManager::getConfig()->GetMap()->GridResolutionCM;
+	double mapRes = ConfigurationManager::getConfig()->GetMap()->Cm_To_Pixel_Ratio;
 	char* path = StringHelper::ConvertStringToCharArray(this->Map_Path);
 	char* filename = pngUtil::PadMap(path, paddingSize);
-	double PixelsToCell = GridResolutionCM/MapResolutionCM;
+	double PixelsToCell = gridRes/mapRes;
 	unsigned width, height;
 
 	std::vector<unsigned char> image;
@@ -80,24 +125,39 @@ void Map::CreateGrid(unsigned paddingSize, double MapResolutionCM, double GridRe
 
 	for (int row = 0; row < Grid_Height; row++)
 	{
-			for (int col = 0; col < Grid_Width; col++)
-			{
-				Cell* cell = getCell(row, col);
+		for (int col = 0; col < Grid_Width; col++)
+		{
+			Cell* cell = getCell(row, col);
 
-				unsigned cellColor = Map::getCellImageColor(row, col, image, width, height, PixelsToCell);
-				if (cellColor == Map::IMAGE_COLOR_OBSTACLE) {
-					cell->setCost(Cell::COST_UNWALKABLE);
-				} else if (cellColor == Map::IMAGE_COLOR_CLEAR) {
-					cell->setCost(Cell::COST_CLEAR);
-				}
+			unsigned cellColor = Map::getCellImageColor(row, col, image, width, height, PixelsToCell);
+			if (cellColor == Map::IMAGE_COLOR_OBSTACLE) {
+				cell->setCost(Cell::COST_UNWALKABLE);
+			} else if (cellColor == Map::IMAGE_COLOR_CLEAR) {
+				cell->setCost(Cell::COST_CLEAR);
 			}
 		}
+	}
 
 	PrintGrid();
-	}
+}
 
 	Cell* Map::getCell(int row, int col) const
 	{
+		if (!isInRange(row, col))
+		{
+			return NULL;
+		}
+
+		return Grid[row][col];
+	}
+
+	Cell* Map::getCellFromLocation(int row, int col) const
+	{
+		double gridRes = ConfigurationManager::getConfig()->GetMap()->GridResolutionCM;
+		double mapRes = ConfigurationManager::getConfig()->GetMap()->Cm_To_Pixel_Ratio;
+		double PixelsToCell = gridRes/mapRes;
+		row = row/PixelsToCell;
+		col = col/PixelsToCell;
 		if (!isInRange(row, col))
 		{
 			return NULL;
@@ -117,9 +177,20 @@ void Map::CreateGrid(unsigned paddingSize, double MapResolutionCM, double GridRe
 		{
 			cout << endl;
 			for (unsigned j = 0; j < Grid_Width; j++)
-			{
-				cout << (int)Grid[i][j]->getCost();
+					{
+				double cost = (int)Grid[i][j]->getCost();
+				char dis;
+				if (cost < 0) {
+					dis = '#';
+				}
+				else {
+					dis = (char)((int)cost + '0');
+				}
+				cout << dis;
 			}
 		}
+		cout << endl;
+		cout << endl;
+		cout << endl;
 	}
 }

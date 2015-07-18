@@ -6,20 +6,33 @@
  */
 
 #include <libplayerc++/playerc++.h>
-#include "Common/MovementManager.h"
+
 #include "Mapping/pngUtil.h"
+
+#include "Common/MovementManager.h"
 #include "Common/StringHelper.h"
 #include "Common/ConfigurationManager.h"
 using namespace Common;
 
+#include "Path/PathCreator.h"
+using namespace Path;
+
 int main() {
-	double gridRes = ConfigurationManager::getConfig()->GetMap()->GridResolutionCM;
 	double mapRes = ConfigurationManager::getConfig()->GetMap()->Cm_To_Pixel_Ratio;
 	double robotSize = ConfigurationManager::getConfig()->GetRobot()->Width;
 	string path = ConfigurationManager::getConfig()->GetMap()->Map_Path;
-	const char* filename = StringHelper::ConvertStringToCharArray(path);
 
-	ConfigurationManager::getConfig()->GetMap()->CreateGrid((1/mapRes)*(robotSize/2), mapRes, gridRes);
+	ConfigurationManager::getConfig()->GetMap()->CreateGrid(((robotSize/2)/mapRes));
+
+	int startX = ConfigurationManager::getConfig()->GetStartX();
+	int startY = ConfigurationManager::getConfig()->GetStartY();
+	Cell* startCell = ConfigurationManager::getConfig()->GetMap()->getCellFromLocation(startX, startY);
+	int finishX = ConfigurationManager::getConfig()->GetGoalX();
+	int finishY = ConfigurationManager::getConfig()->GetGoalY();
+	Cell* goalCell = ConfigurationManager::getConfig()->GetMap()->getCellFromLocation(finishX, finishY);
+
+	PathCreator* creator = new PathCreator();
+	vector<Cell*> robotPath = creator->CreatePath(startCell, goalCell);
 
 	MovementManager* manager = new MovementManager();
 	Robot* robot = ConfigurationManager::getConfig()->GetRobot();

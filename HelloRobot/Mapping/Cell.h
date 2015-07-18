@@ -22,7 +22,7 @@ namespace Mapping {
 			static const double NUM_OF_LAYERS;
 			static const unsigned NUM_NEIGHBORS;
 
-			Cell(unsigned col, unsigned row, double cost = 1.0);
+			Cell(unsigned col, unsigned row, double cost = COST_CLEAR);
 			Cell(const Cell& cell);
 			virtual ~Cell() {}
 
