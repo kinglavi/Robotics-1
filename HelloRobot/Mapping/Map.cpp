@@ -77,11 +77,6 @@ void Map::CreateGrid(unsigned paddingSize, double MapResolutionCM, double GridRe
 	Grid_Width = width/PixelsToCell;
 
 	Initialize(Grid_Height, Grid_Width);
-<<<<<<< HEAD
-=======
-	PrintGrid();
-	int x, y;
->>>>>>> branch 'master' of https://github.com/mkobi/Robotics.git
 
 	for (int row = 0; row < Grid_Height; row++)
 	{
