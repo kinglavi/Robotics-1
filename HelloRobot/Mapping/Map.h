@@ -7,11 +7,15 @@
 
 #ifndef MAP_H_
 #define MAP_H_
+#include "loadpng.h"
 #include "pngUtil.h"
+#include "../Mapping/Cell.h"
 
 using namespace std;
-
+namespace Mapping{
+class Cell;
 class Map {
+
 public:
 	// Consts
 	#define R_OFFSET 0
@@ -27,10 +31,14 @@ public:
 	static const unsigned IMAGE_COLOR_OBSTACLE = 0; // BLACK
 
 	Map();
+	Map(const Map& map);
+	Map(unsigned height, unsigned width);
 	string Map_Path;
 	string Map_Directory;
 	int X_Pixles;
 	int Y_Pixles;
+	int Grid_Height;
+	int Grid_Width;
 	double Cm_To_Pixel_Ratio;
 	int GridResolutionCM;
 
@@ -38,7 +46,14 @@ public:
 	double Map_Y_Cm();
 	vector<unsigned char> image;
 	void CreateGrid(unsigned paddingSize, int MapResolutionCM, int GridResolutionCM);
+	void Initialize(unsigned height, unsigned width);
+	vector<vector<Cell*> > Grid;
+	vector<vector<char> > GridChar;
+	Cell* operator()(int row, int col) const;
 
+	Cell* getCell(int row, int col) const;
+	bool isInRange(int row, int col) const;
+	void PrintGrid();
 	private:
 	// Utility Methods
 	static unsigned getCellImageColor(unsigned row, unsigned col,
@@ -48,5 +63,5 @@ public:
 
 
 };
-
+}
 #endif /* MAP_H_ */

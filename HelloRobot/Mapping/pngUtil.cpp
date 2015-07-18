@@ -71,16 +71,8 @@ char* pngUtil::PadMap(const char* filename, unsigned paddingSize) {
 			paddedImage[y * (paddedWidth * 4) + (x * 4 + 3)] = 255;
 		}
 
-
-
 	for (y = 0; y < height; y++)
 		for (x = 0; x < width; x++) {
-//			if (image[y * width * 4 + x * 4 + 0]
-//					|| image[((y + paddingSize) * (width + paddingSize*2) * 4) + (x + (paddingSize) * 4 + 1)]
-//					|| image[(y + paddingSize) * (width + paddingSize*2) * 4 + (x+paddingSize) * 4 + 2])
-//				color = 0;
-//			else
-//				color = 255;
 			if (image[y * width * 4 + x * 4 + 0] == 0 && image[y * width * 4 + x * 4 + 1] == 0 && image[y * width * 4 + x * 4 + 2] == 0)
 			{
 				for (innerX = x; innerX <= x +(paddingSize*2); innerX++)
@@ -99,10 +91,12 @@ char* pngUtil::PadMap(const char* filename, unsigned paddingSize) {
 			}
 		}
 
-	char* path = StringHelper::ConvertStringToCharArray(ConfigurationManager::getConfig()->GetMap()->Map_Directory + "/newMap.png");
+	string directory = ConfigurationManager::getConfig()->GetMap()->Map_Directory;
+	char* path = StringHelper::ConvertStringToCharArray(directory + "/newMap.png");
 	encodeOneStep(path, paddedImage, paddedWidth, paddedHeight);
 
-	return path;
+	char* pathToReturn = StringHelper::ConvertStringToCharArray(directory + "/newMap.png");
+	return pathToReturn;
 }
 
 
