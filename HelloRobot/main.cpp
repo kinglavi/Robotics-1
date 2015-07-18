@@ -9,11 +9,15 @@
 #include "Common/MovementManager.h"
 #include "Mapping/pngUtil.h"
 #include "Common/ConfigurationManager.h"
+using namespace Common;
 
 int main() {
 	pngUtil* util = new pngUtil();
+	double gridRes = ConfigurationManager::getConfig()->GetMap()->GridResolutionCM;
+	double mapRes = ConfigurationManager::getConfig()->GetMap()->Cm_To_Pixel_Ratio;
+	double robotSize = ConfigurationManager::getConfig()->GetRobot()->Width;
 	const char* filename = "/home/colman/Desktop/Robotics/Robotics/HelloRobot/roboticLabMap.png";
-	util->PadMap(filename, 5);
+	util->CreateGrid(filename, (1/mapRes)*(robotSize/2), mapRes, gridRes);
 
 	MovementManager* manager = new MovementManager();
 
