@@ -9,7 +9,7 @@ namespace Mapping {
 
 	const unsigned Cell::NUM_NEIGHBORS = 8;
 	const double Cell::COST_UNWALKABLE = DBL_MAX;
-	const double Cell::COST_CLEAR = 0;
+	const double Cell::COST_CLEAR = 1;
 	const double Cell::NUM_OF_LAYERS = 5;
 
 	Cell::Cell(unsigned x, unsigned y, double cost) {

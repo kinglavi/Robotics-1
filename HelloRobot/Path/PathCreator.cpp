@@ -59,7 +59,7 @@ void PathCreator::PutWeights() {
 		for (int i = 0; i < cellsToColorThisTime.size(); i++)
 		{
 			Cell* current = cellsToColorThisTime[i];
-			current->setCost(layer);
+			current->setCost(layer + 2);
 			vector<Cell*> ns = current->getNeighbors();
 			for (int n = 0; n < ns.size(); n++)
 			{
