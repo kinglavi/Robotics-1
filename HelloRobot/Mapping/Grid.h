@@ -13,9 +13,9 @@ namespace Mapping {
 
 class Grid {
 public:
-	Grid(unsigned rows, unsigned columns);
+	Grid();
 	virtual ~Grid();
-	Cell*** Cells;
+	vector<vector<Cell*> > Cells;
 	unsigned RowsCount;
 	unsigned ColumnsCount;
 };

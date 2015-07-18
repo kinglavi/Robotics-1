@@ -10,6 +10,7 @@
 
 #include <vector>
 #include "../Mapping/Cell.h"
+#include "../Mapping/Grid.h"
 using namespace Mapping;
 
 namespace Path {
@@ -18,7 +19,8 @@ class PathCreator {
 public:
 	PathCreator();
 	virtual ~PathCreator();
-	vector<Cell*> CreatePath(Cell start, Cell dest);
+	vector<Cell*> CreatePath(Grid* grid, Cell* start, Cell* dest);
+	void PutWeights(Grid* grid);
 };
 
 } /* namespace Path */

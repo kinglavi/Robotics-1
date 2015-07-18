@@ -10,11 +10,12 @@ namespace Mapping {
 	const unsigned Cell::NUM_NEIGHBORS = 8;
 	const double Cell::COST_UNWALKABLE = DBL_MAX;
 	const double Cell::COST_CLEAR = 1;
-	const double Cell::COST_NEAR_WALL_LAYER1 = 7;
-	const double Cell::COST_NEAR_WALL_LAYER2 = 6;
-	const double Cell::COST_NEAR_WALL_LAYER3 = 5;
-	const double Cell::COST_NEAR_WALL_LAYER4 = 4;
-	const double Cell::COST_NEAR_WALL_LAYER5 = 3;
+	const double Cell::COST_NEAR_WALL_LAYER1 = 6;
+	const double Cell::COST_NEAR_WALL_LAYER2 = 5;
+	const double Cell::COST_NEAR_WALL_LAYER3 = 4;
+	const double Cell::COST_NEAR_WALL_LAYER4 = 3;
+	const double Cell::COST_NEAR_WALL_LAYER5 = 2;
+	const double Cell::NUM_OF_LAYERS = 5;
 
 	Cell::Cell(unsigned x, unsigned y, double cost) {
 		m_Col = x;

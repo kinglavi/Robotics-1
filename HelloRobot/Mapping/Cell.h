@@ -19,6 +19,7 @@ namespace Mapping {
 			static const double COST_NEAR_WALL_LAYER3;
 			static const double COST_NEAR_WALL_LAYER4;
 			static const double COST_NEAR_WALL_LAYER5;
+			static const double NUM_OF_LAYERS;
 			static const unsigned NUM_NEIGHBORS;
 
 			Cell(unsigned col, unsigned row, double cost = 1.0);

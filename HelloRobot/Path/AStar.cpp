@@ -10,6 +10,8 @@
 #include <stdlib.h>     /* srand, rand */
 #include <ctime>
 #include <stdio.h>
+#include "../Mapping/Cell.h"
+using namespace Mapping;
 
 using namespace std;
 
@@ -27,28 +29,35 @@ const int dir=8; // number of possible directions to go at any position
 static int dx[dir]={1, 1, 0, -1, -1, -1, 0, 1};
 static int dy[dir]={0, 1, 1, 1, 0, -1, -1, -1};
 
-class node
+class CellNode
 {
     // current position
     int xPos;
     int yPos;
+    Cell* innerCell;
     // total distance already travelled to reach the node
     int level;
     // priority=level+remaining distance estimate
     int priority;  // smaller: higher priority
 
     public:
-        node(int xp, int yp, int d, int p)
-            {xPos=xp; yPos=yp; level=d; priority=p;}
+    CellNode(Cell* cell, int d, int p)
+            {
+    	innerCell = cell;
+    	xPos=innerCell->getRow();
+    	yPos=innerCell->getCol();
+    	level=d;
+    	priority=p;}
 
         int getxPos() const {return xPos;}
         int getyPos() const {return yPos;}
         int getLevel() const {return level;}
         int getPriority() const {return priority;}
+        int getInnerCell() const {return innerCell;}
 
-        void updatePriority(const int & xDest, const int & yDest)
+        void updatePriority(Cell* otherCell)
         {
-             priority=level+estimate(xDest, yDest)*10; //A*
+             priority=level+estimate(otherCell)*10 + innerCell->getCost()*10; //A*
         }
 
         // give better priority to going strait instead of diagonally
@@ -58,11 +67,11 @@ class node
         }
 
         // Estimation function for the remaining distance to the goal.
-        const int & estimate(const int & xDest, const int & yDest) const
+        const int & estimate(Cell* otherCell) const
         {
             static int xd, yd, d;
-            xd=xDest-xPos;
-            yd=yDest-yPos;
+            xd=otherCell->getRow()-xPos;
+            yd=otherCell->getCol()-yPos;
 
             // Euclidian Distance
             d=static_cast<int>(sqrt(xd*xd+yd*yd));
@@ -78,20 +87,19 @@ class node
 };
 
 // Determine priority (in the priority queue)
-bool operator<(const node & a, const node & b)
+bool operator<(const CellNode & a, const CellNode & b)
 {
   return a.getPriority() > b.getPriority();
 }
 
 // A-star algorithm.
 // The route returned is a string of direction digits.
-string pathFind( const int & xStart, const int & yStart,
-                 const int & xFinish, const int & yFinish )
+string pathFind(Grid* grid, Cell* startCell, Cell* finishCell)
 {
-    static priority_queue<node> pq[2]; // list of open (not-yet-tried) nodes
+    static priority_queue<CellNode> pq[2]; // list of open (not-yet-tried) nodes
     static int pqi; // pq index
-    static node* n0;
-    static node* m0;
+    static CellNode* n0;
+    static CellNode* m0;
     static int i, j, x, y, xdx, ydy;
     static char c;
     pqi=0;
@@ -107,8 +115,8 @@ string pathFind( const int & xStart, const int & yStart,
     }
 
     // create the start node and push into list of open nodes
-    n0=new node(xStart, yStart, 0, 0);
-    n0->updatePriority(xFinish, yFinish);
+    n0=new CellNode(startCell, 0, 0);
+    n0->updatePriority(finishCell);
     pq[pqi].push(*n0);
     open_nodes_map[x][y]=n0->getPriority(); // mark it on the open nodes map
 
@@ -117,8 +125,7 @@ string pathFind( const int & xStart, const int & yStart,
     {
         // get the current node w/ the highest priority
         // from the list of open nodes
-        n0=new node( pq[pqi].top().getxPos(), pq[pqi].top().getyPos(),
-                     pq[pqi].top().getLevel(), pq[pqi].top().getPriority());
+        n0=new CellNode( pq[pqi].top().getInnerCell(),pq[pqi].top().getLevel(), pq[pqi].top().getPriority());
 
         x=n0->getxPos(); y=n0->getyPos();
 
@@ -129,12 +136,12 @@ string pathFind( const int & xStart, const int & yStart,
 
         // quit searching when the goal state is reached
         //if((*n0).estimate(xFinish, yFinish) == 0)
-        if(x==xFinish && y==yFinish)
+        if(x==startCell->getRow() && y==startCell->getCol())
         {
             // generate the path from finish to start
             // by following the directions
             string path="";
-            while(!(x==xStart && y==yStart))
+            while(!(x==startCell->getRow() && y==startCell->getCol()))
             {
                 j=dir_map[x][y];
                 c='0'+(j+dir/2)%dir;
@@ -159,10 +166,9 @@ string pathFind( const int & xStart, const int & yStart,
                 || closed_nodes_map[xdx][ydy]==1))
             {
                 // generate a child node
-                m0=new node( xdx, ydy, n0->getLevel(),
-                             n0->getPriority());
+                m0=new CellNode(grid->Cells[xdx][ydy], n0->getLevel(), n0->getPriority());
                 m0->nextLevel(i);
-                m0->updatePriority(xFinish, yFinish);
+                m0->updatePriority(finishCell);
 
                 // if it is not in the open list then add into that
                 if(open_nodes_map[xdx][ydy]==0)
@@ -248,7 +254,7 @@ int Run()
     cout<<"Finish: "<<xB<<","<<yB<<endl;
     // get the route
     clock_t start = clock();
-    string route=pathFind(xA, yA, xB, yB);
+    string route=pathFind(new Grid(), new Cell(0,0), new Cell(10, 10));
     if(route=="") cout<<"An empty route generated!"<<endl;
     clock_t end = clock();
     double time_elapsed = double(end - start);
