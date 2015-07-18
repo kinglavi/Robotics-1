@@ -22,12 +22,7 @@ using namespace Common;
 
 using namespace std;
 
-const int n=60; // horizontal size of the map
-const int m=60; // vertical size size of the map
-static int map[n][m];
-static int closed_nodes_map[n][m]; // map of closed (tried-out) nodes
-static int open_nodes_map[n][m]; // map of open (not-yet-tried) nodes
-static int dir_map[n][m]; // map of directions
+
 const int dir=8; // number of possible directions to go at any position
 // if dir==4
 //static int dx[dir]={1, 0, -1, 0};
@@ -104,12 +99,19 @@ bool operator<(const CellNode & a, const CellNode & b)
 string A_Star::pathFind(Cell* startCell, Cell* finishCell)
 {
 	vector<vector<Cell*> > grid = ConfigurationManager::getConfig()->GetMap()->Grid;
-    static priority_queue<CellNode> pq[2]; // list of open (not-yet-tried) nodes
-    static int pqi; // pq index
-    static CellNode* n0;
-    static CellNode* m0;
-    static int i, j, x, y, xdx, ydy;
-    static char c;
+
+	int n=ConfigurationManager::getConfig()->GetMap()->Grid_Height; // horizontal size of the map
+	int m=ConfigurationManager::getConfig()->GetMap()->Grid_Width; // vertical size size of the map
+	int map[n][m];
+	int closed_nodes_map[n][m]; // map of closed (tried-out) nodes
+	int open_nodes_map[n][m]; // map of open (not-yet-tried) nodes
+	int dir_map[n][m]; // map of directions
+    priority_queue<CellNode> pq[2]; // list of open (not-yet-tried) nodes
+    int pqi; // pq index
+    CellNode* n0;
+    CellNode* m0;
+    int i, j, x, y, xdx, ydy;
+    char c;
     pqi=0;
 
     // reset the node maps
