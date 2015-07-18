@@ -76,4 +76,53 @@ void PathCreator::PutWeights() {
 	}
 }
 
+bool PathCreator::IsStraitApprocah(Coordinates StartCoordinateInCM, Coordinates EndCoordinateInCM)
+{
+		Map* map = ConfigurationManager::getConfig()->GetMap();
+		vector<vector<Cell*> > grid = ConfigurationManager::getConfig()->GetMap()->Grid;
+
+		// Checks the angle of the two locations.
+		bool isBluntAngle = (fabs(EndCoordinateInCM.Y - StartCoordinateInCM.Y) > fabs(EndCoordinateInCM.X - StartCoordinateInCM.X));
+		if (isBluntAngle) {
+			swap(StartCoordinateInCM.X, StartCoordinateInCM.Y);
+			swap(EndCoordinateInCM.X, EndCoordinateInCM.Y);
+		}
+
+		// Makes the higher valued coordinate in the end location.
+		if (StartCoordinateInCM.X > EndCoordinateInCM.X) {
+			swap(StartCoordinateInCM.X, EndCoordinateInCM.X);
+			swap(StartCoordinateInCM.Y, EndCoordinateInCM.Y);
+		}
+
+		float xDelta = EndCoordinateInCM.X - StartCoordinateInCM.X;
+		float yDelta = fabs(EndCoordinateInCM.Y - StartCoordinateInCM.Y);
+
+		float error = xDelta / 2.0f;
+		int yStep = (StartCoordinateInCM.Y < EndCoordinateInCM.Y) ? 1 : -1;
+		int y = (int) StartCoordinateInCM.Y;
+
+		int maxX = (int) EndCoordinateInCM.X;
+
+		int x;
+		for (x = (int) StartCoordinateInCM.X; x < maxX; x++) {
+			if (isBluntAngle) {
+				if (!map->CmCoordinateToCell(y, x)->isWalkable()) {
+					return false;
+				}
+			} else {
+				if (!map->CmCoordinateToCell(x, y)->isWalkable()) {
+					return false;
+				}
+			}
+
+			error -= yDelta;
+			if (error < 0) {
+				y += yStep;
+				error += xDelta;
+			}
+		}
+
+		return true;
+	}
+
 } /* namespace Path */

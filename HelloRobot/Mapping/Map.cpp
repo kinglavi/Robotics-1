@@ -193,4 +193,12 @@ void Map::CreateGrid(unsigned paddingSize)
 		cout << endl;
 		cout << endl;
 	}
+	Cell* Map::CmCoordinateToCell(double x, double y) const {
+			float cmPerGridCell = ConfigurationManager::getConfig()->GetMap()->GridResolutionCM;
+			unsigned row = y / cmPerGridCell;
+			unsigned col = x / cmPerGridCell;
+
+			return getCell(row, col);
+		}
+
 }

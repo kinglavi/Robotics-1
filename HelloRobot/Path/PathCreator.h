@@ -21,6 +21,7 @@ public:
 	virtual ~PathCreator();
 	vector<Cell*> CreatePath(Cell* start, Cell* dest);
 	void PutWeights();
+	bool IsStraitApprocah(Coordinates firstWorldLocationCm, Coordinates secondWorldLocationCm);
 };
 
 } /* namespace Path */
