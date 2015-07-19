@@ -13,6 +13,8 @@
 #include <stdlib.h>
 #include <vector>
 #include "Position.h"
+#include <stdexcept>
+#include "ConvertionHandler.h"
 
 using namespace PlayerCc;
 using namespace std;
@@ -20,6 +22,11 @@ using namespace std;
 class Robot {
 public:
 	Robot();
+	void Read();
+	void setSpeed(double forward_CmPerSec, double angular_RadiansPerSec);
+	float* getLaserScan();
+	static double index_to_deg(int index);
+	static unsigned deg_to_index(double degree);
 	int Width;
 	int Height;
 
