@@ -4,6 +4,7 @@
 #include "pngUtil.h"
 #include "Map.h"
 #include <float.h>
+#include <algorithm>
 
 using namespace Common;
 using namespace Mapping;
@@ -46,7 +47,7 @@ Map::Map(const Map& map) :
 
 	for (int row = 0; row < map.Grid_Height; row++) {
 		for (int col = 0; col < map.Grid_Width; col++) {
-			Cell* cell = new Cell(row, col);
+			Cell* cell = new Cell(col, row);
 			Grid[row][col] = new Cell(*cell);
 		}
 	}
@@ -55,52 +56,52 @@ Map::Map(const Map& map) :
 void Map::Initialize(unsigned height, unsigned width)
 {
 	Grid.resize(height);
-	for (unsigned i = 0; i < height; i++) {
-		Grid[i].resize(width);
-		for (unsigned j = 0; j < width; j++) {
+	for (unsigned row = 0; row < height; row++) {
+		Grid[row].resize(width);
+		for (unsigned col = 0; col < width; col++) {
 			// Initialize cells
-			Grid[i][j] = new Cell(i,j);
+			Grid[row][col] = new Cell(row, col);
 		}
 	}
 
-	for (unsigned i = 0; i < height; i++) {
-		for (unsigned j = 0; j < width; j++) {
-			vector<Cell*> nbrs;
+	for (unsigned row = 0; row < height; row++) {
+		for (unsigned col = 0; col < width; col++) {
+			vector<Cell*>* nbrs = new vector<Cell*>();
 			// Top
-			if (i != 0) {
-				if (j != 0) {
+			if (row != 0) {
+				if (col != 0) {
 					// Top left
-					nbrs.push_back(Grid[i - 1][j - 1]);
+					nbrs->push_back(Grid[row - 1][col - 1]);
 				}
 				// Top middle
-				nbrs.push_back(Grid[i - 1][j]);
-				if (j < width - 1) {
+				nbrs->push_back(Grid[row - 1][col]);
+				if (col < width - 1) {
 					// Top right
-					nbrs.push_back(Grid[i - 1][j + 1]);
+					nbrs->push_back(Grid[row - 1][col + 1]);
 				}
 			}
-			if (j < width - 1) {
+			if (col < width - 1) {
 				// Middle right
-				nbrs.push_back(Grid[i][j + 1]);
+				nbrs->push_back(Grid[row][col + 1]);
 			}
 			// Bottom
-			if (i < height - 1) {
-				if (j < width - 1) {
+			if (row < height - 1) {
+				if (col < width - 1) {
 					// Bottom right
-					nbrs.push_back(Grid[i + 1][j + 1]);
+					nbrs->push_back(Grid[row + 1][col + 1]);
 				}
 				// Bottom middle
-				nbrs.push_back(Grid[i + 1][j]);
-				if (j != 0) {
+				nbrs->push_back(Grid[row + 1][col]);
+				if (col != 0) {
 					// Bottom left
-					nbrs.push_back(Grid[i + 1][j - 1]);
+					nbrs->push_back(Grid[row + 1][col - 1]);
 				}
 			}
-			if (j != 0) {
+			if (col != 0) {
 				// Middle left
-				nbrs.push_back(Grid[i][j - 1]);
+				nbrs->push_back(Grid[row][col - 1]);
 			}
-			Grid[i][j]->setNeighbors(nbrs);
+			Grid[row][col]->setNeighbors(nbrs);
 		}
 	}
 }
@@ -151,13 +152,13 @@ void Map::CreateGrid(unsigned paddingSize)
 		return Grid[row][col];
 	}
 
-	Cell* Map::getCellFromLocation(int row, int col) const
+	Cell* Map::getCellFromLocation(int x, int y) const
 	{
 		double gridRes = ConfigurationManager::Instance()->GetMap()->GridResolutionCM;
 		double mapRes = ConfigurationManager::Instance()->GetMap()->Cm_To_Pixel_Ratio;
 		double PixelsToCell = gridRes/mapRes;
-		row = row/PixelsToCell;
-		col = col/PixelsToCell;
+		int row = y/PixelsToCell;
+		int col = x/PixelsToCell;
 		if (!isInRange(row, col))
 		{
 			return NULL;
@@ -173,12 +174,12 @@ void Map::CreateGrid(unsigned paddingSize)
 
 	void Map::PrintGrid()
 	{
-		for (unsigned i = 0; i < Grid_Height; i++)
+		for (unsigned row = 0; row < Grid_Height; row++)
 		{
 			cout << endl;
-			for (unsigned j = 0; j < Grid_Width; j++)
+			for (unsigned col = 0; col < Grid_Width; col++)
 					{
-				double cost = (int)Grid[i][j]->getCost();
+				double cost = (int)Grid[row][col]->getCost();
 				char dis;
 				if (cost < 0) {
 					dis = '#';
@@ -193,12 +194,85 @@ void Map::CreateGrid(unsigned paddingSize)
 		cout << endl;
 		cout << endl;
 	}
-	Cell* Map::CmCoordinateToCell(double x, double y) const {
-			float cmPerGridCell = ConfigurationManager::Instance()->GetMap()->GridResolutionCM;
-			unsigned row = y / cmPerGridCell;
-			unsigned col = x / cmPerGridCell;
 
-			return getCell(row, col);
+	void Map::PrintGrid(Cell* start, Cell* end)
+	{
+		vector<Cell*> emptyPath;
+		PrintGrid(start, end, emptyPath);
+	}
+
+	void Map::PrintGrid(Cell* start, Cell* end, vector<Coordinates*> path)
+	{
+		vector<Cell*> cells;
+		for (int i = 0; i < path.size(); i++)
+		{
+			cells.push_back(getCellFromLocation(path[i]->X, path[i]->Y));
 		}
+		PrintGrid(start, end, cells);
+	}
+
+	void Map::PrintGrid(Cell* start, Cell* end, vector<Cell*> path)
+	{
+
+
+		for (unsigned row = 0; row < Grid_Height; row++)
+		{
+			cout << endl;
+			for (unsigned col = 0; col < Grid_Width; col++)
+			{
+				Cell* currentCell = Grid[row][col];
+
+				double cost = (int)currentCell->getCost();
+				char dis;
+				if (cost < 0) {
+					dis = '#';
+				}
+				else {
+					dis = (char)((int)cost + '0');
+				}
+
+				if(dis != '#' && std::find(path.begin(), path.end(), currentCell) != path.end())
+				{
+					dis = 'X';
+				}
+
+				if (start->getRow() == row && start->getCol() == col)
+				{
+					dis = 'S';
+				}
+
+				if (end->getRow() == row && end->getCol() == col)
+				{
+					dis = 'E';
+				}
+
+				cout << dis;
+			}
+		}
+		cout << endl;
+		cout << endl;
+		cout << endl;
+	}
+
+	Cell* Map::CmCoordinateToCell(double x, double y) const {
+		double gridRes = ConfigurationManager::Instance()->GetMap()->GridResolutionCM;
+		double mapRes = ConfigurationManager::Instance()->GetMap()->Cm_To_Pixel_Ratio;
+		double PixelsToCell = gridRes/mapRes;
+		unsigned row = y / PixelsToCell;
+		unsigned col = x / PixelsToCell;
+
+		return getCell(row, col);
+	}
+
+	Coordinates* Map::CellToCoordinateOfCenterCell(Cell* cell) const {
+		double gridRes = ConfigurationManager::Instance()->GetMap()->GridResolutionCM;
+		double mapRes = ConfigurationManager::Instance()->GetMap()->Cm_To_Pixel_Ratio;
+		double PixelsToCell = gridRes/mapRes;
+
+		unsigned y = (cell->getRow() * PixelsToCell) + PixelsToCell/2;// place it in the center of the cell
+		unsigned x = (cell->getCol() * PixelsToCell) + PixelsToCell/2; // place it in the center of the cell
+
+		return new Coordinates(x, y, 0);
+	}
 
 }

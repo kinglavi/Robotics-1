@@ -3,6 +3,7 @@
 #include "loadpng.h"
 #include "pngUtil.h"
 #include "../Mapping/Cell.h"
+#include "../Mapping/Coordinates.h"
 
 using namespace std;
 namespace Mapping{
@@ -45,10 +46,14 @@ public:
 	Cell* operator()(int row, int col) const;
 
 	Cell* getCell(int row, int col) const;
-	Cell* getCellFromLocation(int row, int col) const;
+	Cell* getCellFromLocation(int x, int y) const;
 	bool isInRange(int row, int col) const;
 	Cell* CmCoordinateToCell(double x, double y) const;
+	Coordinates* CellToCoordinateOfCenterCell(Cell* cell) const;
 	void PrintGrid();
+	void PrintGrid(Cell* start, Cell* end);
+	void PrintGrid(Cell* start, Cell* end, vector<Cell*> path);
+	void PrintGrid(Cell* start, Cell* end, vector<Coordinates*> path);
 	private:
 	// Utility Methods
 	static unsigned getCellImageColor(unsigned row, unsigned col,

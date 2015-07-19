@@ -26,13 +26,16 @@ int main() {
 
 	int startX = ConfigurationManager::Instance()->GetStartX();
 	int startY = ConfigurationManager::Instance()->GetStartY();
-	Cell* startCell = ConfigurationManager::Instance()->GetMap()->getCellFromLocation(startX, startY);
+	int startYaw = ConfigurationManager::Instance()->GetStartYaw();
+	Coordinates* start = new Coordinates(startX, startY, startYaw);
+
 	int finishX = ConfigurationManager::Instance()->GetGoalX();
 	int finishY = ConfigurationManager::Instance()->GetGoalY();
-	Cell* goalCell = ConfigurationManager::Instance()->GetMap()->getCellFromLocation(finishX, finishY);
+
+	Coordinates* goal = new Coordinates(finishX, finishY, 0);
 
 	PathCreator* creator = new PathCreator();
-	vector<Cell*> robotPath = creator->CreatePath(startCell, goalCell);
+	vector<Coordinates*> robotPath = creator->CreatePath(start, goal);
 
 	MovementManager* manager = new MovementManager();
 	Robot* robot = ConfigurationManager::Instance()->GetRobot();
