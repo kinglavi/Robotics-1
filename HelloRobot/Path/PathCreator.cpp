@@ -16,7 +16,7 @@
 #include <math.h>
 using namespace Common;
 
-#define DEBUG_LISTS 1
+#define DEBUG_LISTS 0
 #define DEBUG_LIST_LENGTHS_ONLY 0
 
 using namespace std;
@@ -32,13 +32,16 @@ PathCreator::~PathCreator() {
 	// TODO Auto-generated destructor stub
 }
 
-vector<Cell*> PathCreator::CreatePath(Cell* start, Cell* dest) {
+vector<Coordinates*> PathCreator::CreatePath(Coordinates* start, Coordinates* end) {
+	Cell* startCell = ConfigurationManager::Instance()->GetMap()->getCellFromLocation(start->X, start->Y);
+	Cell* endCell = ConfigurationManager::Instance()->GetMap()->getCellFromLocation(end->X, end->Y);
 	PutWeights();
-	ConfigurationManager::Instance()->GetMap()->PrintGrid(start, dest);
-//	string strPath = A_Star::pathFind(start, dest); // still unchecked
-	vector<Cell*> path = RunAStar(start, dest);
-	ConfigurationManager::Instance()->GetMap()->PrintGrid(start, dest, path);
-	return path;
+	ConfigurationManager::Instance()->GetMap()->PrintGrid(startCell, endCell);
+	vector<Cell*> path = RunAStar(startCell, endCell);
+	ConfigurationManager::Instance()->GetMap()->PrintGrid(startCell, endCell, path);
+	vector<Coordinates*> smoothPath = SmoothPath(path, start, end);
+	ConfigurationManager::Instance()->GetMap()->PrintGrid(startCell, endCell, smoothPath);
+	return smoothPath;
 }
 
 void PathCreator::PutWeights() {
@@ -88,7 +91,6 @@ void PathCreator::PutWeights() {
 	}
 }
 
-<<<<<<< HEAD
 vector<Cell*> PathCreator::RunAStar(Cell* start, Cell* end)
 {
 
@@ -137,7 +139,9 @@ vector<Cell*> PathCreator::RunAStar(Cell* start, Cell* end)
 			while( p )
 			{
 				len++;
+	#if !DEBUG_LIST_LENGTHS_ONLY
 				((MapSearchNode *)p)->PrintNodeInfo();
+	#endif
 				p = astarsearch.GetOpenListNext();
 
 			}
@@ -151,7 +155,9 @@ vector<Cell*> PathCreator::RunAStar(Cell* start, Cell* end)
 			while( p )
 			{
 				len++;
+	#if !DEBUG_LIST_LENGTHS_ONLY
 				p->PrintNodeInfo();
+	#endif
 				p = astarsearch.GetClosedListNext();
 			}
 
@@ -167,6 +173,9 @@ vector<Cell*> PathCreator::RunAStar(Cell* start, Cell* end)
 
 				MapSearchNode *node = astarsearch.GetSolutionStart();
 
+	#if DISPLAY_SOLUTION
+				cout << "Displaying solution\n";
+	#endif
 				int steps = 0;
 
 				Cell* cell = ConfigurationManager::Instance()->GetMap()->getCell(node->row, node->col);
@@ -208,91 +217,136 @@ vector<Cell*> PathCreator::RunAStar(Cell* start, Cell* end)
 	}
 }
 
-vector<Coordinates> PathCreator::SmoothPath(vector<Cell*> cellsPath, Coordinates start, Coordinates end)
+
+vector<Coordinates*> PathCreator::SmoothPath(vector<Cell*> cellsPath, Coordinates* start, Coordinates* end)
 {
-	vector<Coordinates> originPath;
+	vector<Coordinates*> originPath;
+
 	originPath.push_back(start);
-//	for (int i = 0; i = cellsPath.size(); );
+	for (int i = 0; i < cellsPath.size(); i++)
+	{
+		originPath.push_back(ConfigurationManager::Instance()->GetMap()->CellToCoordinateOfCenterCell(cellsPath[i]));
+	}
+	originPath.push_back(end);
+
 	return originPath;
+//	vector<Coordinates*> coolPath;
+//	unsigned lastCoordinate = 0;
+//	for (unsigned i = 0; i < originPath.size(); i++) {
+//		Coordinates* currentCoordinate = originPath[i];
+//		if (i == 0 || i == originPath.size() - 1 || i - lastCoordinate >= MAX_WAYPOINT_SPACING) {
+//			lastCoordinate = i;
+//			coolPath.push_back(currentCoordinate);
+//		} else {
+//			Coordinates* lastWaypointWorldLocation = coolPath.back();
+//			if (!IsStraightApproche(lastWaypointWorldLocation, currentCoordinate)) {
+//				lastCoordinate = i - 1;
+//				Coordinates* lastWaypointWorldLocation = originPath[lastCoordinate];
+//				coolPath.push_back(lastWaypointWorldLocation);
+//			}
+//		}
+//	}
+//
+//	return coolPath;
 }
 
-bool PathCreator::IsStraitApprocah(Coordinates StartCoordinateInCM, Coordinates EndCoordinateInCM)
-=======
-bool PathCreator::IsStraitApprocah(Coordinates* StartCoordinateInCM, Coordinates* EndCoordinateInCM)
->>>>>>> branch 'master' of https://github.com/mkobi/Robotics.git
+bool PathCreator::IsStraightApproche(Coordinates* startCoordinate, Coordinates* endCoordinate)
 {
-		Map* map = ConfigurationManager::Instance()->GetMap();
-		vector<vector<Cell*> > grid = ConfigurationManager::Instance()->GetMap()->Grid;
+//		Map* map = ConfigurationManager::Instance()->GetMap();
+//		vector<vector<Cell*> > grid = ConfigurationManager::Instance()->GetMap()->Grid;
+//
+//		// Checks the angle of the two locations.
+//		bool isBluntAngle = (fabs(endCoordinate->Y - startCoordinate->Y) > fabs(endCoordinate->X - startCoordinate->X));
+//		if (isBluntAngle) {
+//			swap(startCoordinate->X, startCoordinate->Y);
+//			swap(endCoordinate->X, endCoordinate->Y);
+//		}
+//
+//		// Makes the higher valued coordinate in the end location.
+//		if (startCoordinate->X > endCoordinate->X) {
+//			swap(startCoordinate->X, endCoordinate->X);
+//			swap(startCoordinate->Y, endCoordinate->Y);
+//		}
+//
+//		float xDelta = endCoordinate->X - startCoordinate->X;
+//		float yDelta = fabs(endCoordinate->Y - startCoordinate->Y);
+//
+//		float error = xDelta / 2.0f;
+//		int yStep = (startCoordinate->Y < endCoordinate->Y) ? 1 : -1;
+//		int y = (int) startCoordinate->Y;
+//
+//		int maxX = (int) endCoordinate->X;
+//
+//		int x;
+//		for (x = (int) startCoordinate->X; x < maxX; x++) {
+//			if (isBluntAngle) {
+//				if (!map->CmCoordinateToCell(y, x)->isWalkable()) {
+//					return false;
+//				}
+//			} else {
+//				if (!map->CmCoordinateToCell(x, y)->isWalkable()) {
+//					return false;
+//				}
+//			}
+//
+//			error -= yDelta;
+//			if (error < 0) {
+//				y += yStep;
+//				error += xDelta;
+//			}
+//		}
+//
+//		return true;
 
-		// Checks the angle of the two locations.
-		bool isBluntAngle = (fabs(EndCoordinateInCM->Y - StartCoordinateInCM->Y) > fabs(EndCoordinateInCM->X - StartCoordinateInCM->X));
-		if (isBluntAngle) {
-			swap(StartCoordinateInCM->X, StartCoordinateInCM->Y);
-			swap(EndCoordinateInCM->X, EndCoordinateInCM->Y);
-		}
-
-		// Makes the higher valued coordinate in the end location.
-		if (StartCoordinateInCM->X > EndCoordinateInCM->X) {
-			swap(StartCoordinateInCM->X, EndCoordinateInCM->X);
-			swap(StartCoordinateInCM->Y, EndCoordinateInCM->Y);
-		}
-
-		float xDelta = EndCoordinateInCM->X - StartCoordinateInCM->X;
-		float yDelta = fabs(EndCoordinateInCM->Y - StartCoordinateInCM->Y);
-
-		float error = xDelta / 2.0f;
-		int yStep = (StartCoordinateInCM->Y < EndCoordinateInCM->Y) ? 1 : -1;
-		int y = (int) StartCoordinateInCM->Y;
-
-		int maxX = (int) EndCoordinateInCM->X;
-
-		int x;
-		for (x = (int) StartCoordinateInCM->X; x < maxX; x++) {
-			if (isBluntAngle) {
-				if (!map->CmCoordinateToCell(y, x)->isWalkable()) {
-					return false;
-				}
-			} else {
-				if (!map->CmCoordinateToCell(x, y)->isWalkable()) {
-					return false;
-				}
-			}
-
-			error -= yDelta;
-			if (error < 0) {
-				y += yStep;
-				error += xDelta;
-			}
-		}
+//		Map* map = ConfigurationManager::Instance()->GetMap();
+//		vector<vector<Cell*> > grid = ConfigurationManager::Instance()->GetMap()->Grid;
+//		double gridRes = ConfigurationManager::Instance()->GetMap()->GridResolutionCM;
+//		double mapRes = ConfigurationManager::Instance()->GetMap()->Cm_To_Pixel_Ratio;
+//		double PixelsToCell = gridRes/mapRes;
+//
+//		float sizeOfMovement = PixelsToCell/2;
+//		float diffX = fabs(endCoordinate->X - startCoordinate->X);
+//		float diffY = fabs(endCoordinate->Y - startCoordinate->Y);
+//
+//		float dx = PixelsToCell/2;
+//		float dy = PixelsToCell/2;
+//
+//		if (startCoordinate->X > endCoordinate->X)
+//		{
+//			dx = -dx;
+//		}
+//
+//		if (startCoordinate->Y > endCoordinate->Y)
+//		{
+//			dx = -dx;
+//		}
+//
+//		float error = xDelta / 2.0f;
+//		int yStep = (startCoordinate->Y < endCoordinate->Y) ? 1 : -1;
+//		int y = (int) startCoordinate->Y;
+//
+//		int maxX = (int) endCoordinate->X;
+//
+//		int x;
+//		for (x = (int) startCoordinate->X; x < maxX; x++) {
+//			if (isBluntAngle) {
+//				if (!map->CmCoordinateToCell(y, x)->isWalkable()) {
+//					return false;
+//				}
+//			} else {
+//				if (!map->CmCoordinateToCell(x, y)->isWalkable()) {
+//					return false;
+//				}
+//			}
+//
+//			error -= yDelta;
+//			if (error < 0) {
+//				y += yStep;
+//				error += xDelta;
+//			}
+//		}
 
 		return true;
 	}
-
-vector<Coordinates*> PathCreator::GetFinalPath(Cell* start, Cell* dest) {
-		vector<Cell*> InitialPath = CreatePath(start, dest);
-/*		if (InitialPath.empty()) {
-			cout << "There is no valid path to destination." << endl;
-			return InitialPath;
-		}*/
-
-		vector<Coordinates*> waypoints;
-		unsigned lastTakenWaypointIndex = 0;
-		for (unsigned waypointIndex = 0; waypointIndex < InitialPath.size(); waypointIndex++) {
-			Coordinates* currentWaypointWorldLocation = InitialPath[waypointIndex]->getWorldLocationCm();
-			if (waypointIndex == 0 || waypointIndex == InitialPath.size() - 1 || waypointIndex - lastTakenWaypointIndex >= MAX_WAYPOINT_SPACING) {
-				lastTakenWaypointIndex = waypointIndex;
-				waypoints.push_back(currentWaypointWorldLocation);
-			} else {
-				Coordinates* lastWaypointWorldLocation = waypoints.back();
-				if (!IsStraitApprocah(lastWaypointWorldLocation, currentWaypointWorldLocation)) {
-					lastTakenWaypointIndex = waypointIndex - 1;
-					Coordinates* lastWaypointWorldLocation = InitialPath[lastTakenWaypointIndex]->getWorldLocationCm();
-					waypoints.push_back(lastWaypointWorldLocation);
-				}
-			}
-		}
-
-		return waypoints;
-	}
-
 } /* namespace Path */
+

@@ -152,13 +152,13 @@ void Map::CreateGrid(unsigned paddingSize)
 		return Grid[row][col];
 	}
 
-	Cell* Map::getCellFromLocation(int row, int col) const
+	Cell* Map::getCellFromLocation(int x, int y) const
 	{
 		double gridRes = ConfigurationManager::Instance()->GetMap()->GridResolutionCM;
 		double mapRes = ConfigurationManager::Instance()->GetMap()->Cm_To_Pixel_Ratio;
 		double PixelsToCell = gridRes/mapRes;
-		row = row/PixelsToCell;
-		col = col/PixelsToCell;
+		int row = y/PixelsToCell;
+		int col = x/PixelsToCell;
 		if (!isInRange(row, col))
 		{
 			return NULL;
@@ -197,34 +197,18 @@ void Map::CreateGrid(unsigned paddingSize)
 
 	void Map::PrintGrid(Cell* start, Cell* end)
 	{
-		for (unsigned row = 0; row < Grid_Height; row++)
-		{
-			cout << endl;
-			for (unsigned col = 0; col < Grid_Width; col++)
-					{
-				double cost = (int)Grid[row][col]->getCost();
-				char dis;
-				if (cost < 0) {
-					dis = '#';
-				}
-				else {
-					dis = (char)((int)cost + '0');
-				}
-				if (start->getRow() == row && start->getCol() == col)
-				{
-					dis = 'S';
-				}
+		vector<Cell*> emptyPath;
+		PrintGrid(start, end, emptyPath);
+	}
 
-				if (end->getRow() == row && end->getCol() == col)
-				{
-					dis = 'E';
-				}
-				cout << dis;
-			}
+	void Map::PrintGrid(Cell* start, Cell* end, vector<Coordinates*> path)
+	{
+		vector<Cell*> cells;
+		for (int i = 0; i < path.size(); i++)
+		{
+			cells.push_back(getCellFromLocation(path[i]->X, path[i]->Y));
 		}
-		cout << endl;
-		cout << endl;
-		cout << endl;
+		PrintGrid(start, end, cells);
 	}
 
 	void Map::PrintGrid(Cell* start, Cell* end, vector<Cell*> path)
@@ -271,11 +255,24 @@ void Map::CreateGrid(unsigned paddingSize)
 	}
 
 	Cell* Map::CmCoordinateToCell(double x, double y) const {
-			float cmPerGridCell = ConfigurationManager::Instance()->GetMap()->GridResolutionCM;
-			unsigned row = y / cmPerGridCell;
-			unsigned col = x / cmPerGridCell;
+		double gridRes = ConfigurationManager::Instance()->GetMap()->GridResolutionCM;
+		double mapRes = ConfigurationManager::Instance()->GetMap()->Cm_To_Pixel_Ratio;
+		double PixelsToCell = gridRes/mapRes;
+		unsigned row = y / PixelsToCell;
+		unsigned col = x / PixelsToCell;
 
-			return getCell(row, col);
-		}
+		return getCell(row, col);
+	}
+
+	Coordinates* Map::CellToCoordinateOfCenterCell(Cell* cell) const {
+		double gridRes = ConfigurationManager::Instance()->GetMap()->GridResolutionCM;
+		double mapRes = ConfigurationManager::Instance()->GetMap()->Cm_To_Pixel_Ratio;
+		double PixelsToCell = gridRes/mapRes;
+
+		unsigned y = (cell->getRow() * PixelsToCell) + PixelsToCell/2;// place it in the center of the cell
+		unsigned x = (cell->getCol() * PixelsToCell) + PixelsToCell/2; // place it in the center of the cell
+
+		return new Coordinates(x, y, 0);
+	}
 
 }
