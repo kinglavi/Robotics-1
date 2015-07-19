@@ -229,122 +229,69 @@ vector<Coordinates*> PathCreator::SmoothPath(vector<Cell*> cellsPath, Coordinate
 	}
 	originPath.push_back(end);
 
-	return originPath;
-//	vector<Coordinates*> coolPath;
-//	unsigned lastCoordinate = 0;
-//	for (unsigned i = 0; i < originPath.size(); i++) {
-//		Coordinates* currentCoordinate = originPath[i];
-//		if (i == 0 || i == originPath.size() - 1 || i - lastCoordinate >= MAX_WAYPOINT_SPACING) {
-//			lastCoordinate = i;
-//			coolPath.push_back(currentCoordinate);
-//		} else {
-//			Coordinates* lastWaypointWorldLocation = coolPath.back();
-//			if (!IsStraightApproche(lastWaypointWorldLocation, currentCoordinate)) {
-//				lastCoordinate = i - 1;
-//				Coordinates* lastWaypointWorldLocation = originPath[lastCoordinate];
-//				coolPath.push_back(lastWaypointWorldLocation);
-//			}
-//		}
-//	}
-//
-//	return coolPath;
+	vector<Coordinates*> coolPath;
+	unsigned lastCoordinate = 0;
+	for (unsigned i = 0; i < originPath.size(); i++) {
+		Coordinates* currentCoordinate = originPath[i];
+		if (i == 0 || i == originPath.size() - 1 || i - lastCoordinate >= MAX_WAYPOINT_SPACING) {
+			lastCoordinate = i;
+			coolPath.push_back(currentCoordinate);
+		} else {
+			Coordinates* lastWaypointWorldLocation = coolPath.back();
+			if (!IsStraightApproche(lastWaypointWorldLocation, currentCoordinate)) {
+				lastCoordinate = i - 1;
+				Coordinates* lastWaypointWorldLocation = originPath[lastCoordinate];
+				coolPath.push_back(lastWaypointWorldLocation);
+			}
+		}
+	}
+
+	return coolPath;
 }
 
 bool PathCreator::IsStraightApproche(Coordinates* startCoordinate, Coordinates* endCoordinate)
 {
-//		Map* map = ConfigurationManager::Instance()->GetMap();
-//		vector<vector<Cell*> > grid = ConfigurationManager::Instance()->GetMap()->Grid;
-//
-//		// Checks the angle of the two locations.
-//		bool isBluntAngle = (fabs(endCoordinate->Y - startCoordinate->Y) > fabs(endCoordinate->X - startCoordinate->X));
-//		if (isBluntAngle) {
-//			swap(startCoordinate->X, startCoordinate->Y);
-//			swap(endCoordinate->X, endCoordinate->Y);
-//		}
-//
-//		// Makes the higher valued coordinate in the end location.
-//		if (startCoordinate->X > endCoordinate->X) {
-//			swap(startCoordinate->X, endCoordinate->X);
-//			swap(startCoordinate->Y, endCoordinate->Y);
-//		}
-//
-//		float xDelta = endCoordinate->X - startCoordinate->X;
-//		float yDelta = fabs(endCoordinate->Y - startCoordinate->Y);
-//
-//		float error = xDelta / 2.0f;
-//		int yStep = (startCoordinate->Y < endCoordinate->Y) ? 1 : -1;
-//		int y = (int) startCoordinate->Y;
-//
-//		int maxX = (int) endCoordinate->X;
-//
-//		int x;
-//		for (x = (int) startCoordinate->X; x < maxX; x++) {
-//			if (isBluntAngle) {
-//				if (!map->CmCoordinateToCell(y, x)->isWalkable()) {
-//					return false;
-//				}
-//			} else {
-//				if (!map->CmCoordinateToCell(x, y)->isWalkable()) {
-//					return false;
-//				}
-//			}
-//
-//			error -= yDelta;
-//			if (error < 0) {
-//				y += yStep;
-//				error += xDelta;
-//			}
-//		}
-//
-//		return true;
+		Map* map = ConfigurationManager::Instance()->GetMap();
+		vector<vector<Cell*> > grid = ConfigurationManager::Instance()->GetMap()->Grid;
+		double gridRes = ConfigurationManager::Instance()->GetMap()->GridResolutionCM;
+		double mapRes = ConfigurationManager::Instance()->GetMap()->Cm_To_Pixel_Ratio;
+		double PixelsToCell = gridRes/mapRes;
 
-//		Map* map = ConfigurationManager::Instance()->GetMap();
-//		vector<vector<Cell*> > grid = ConfigurationManager::Instance()->GetMap()->Grid;
-//		double gridRes = ConfigurationManager::Instance()->GetMap()->GridResolutionCM;
-//		double mapRes = ConfigurationManager::Instance()->GetMap()->Cm_To_Pixel_Ratio;
-//		double PixelsToCell = gridRes/mapRes;
-//
-//		float sizeOfMovement = PixelsToCell/2;
-//		float diffX = fabs(endCoordinate->X - startCoordinate->X);
-//		float diffY = fabs(endCoordinate->Y - startCoordinate->Y);
-//
-//		float dx = PixelsToCell/2;
-//		float dy = PixelsToCell/2;
-//
-//		if (startCoordinate->X > endCoordinate->X)
-//		{
-//			dx = -dx;
-//		}
-//
-//		if (startCoordinate->Y > endCoordinate->Y)
-//		{
-//			dx = -dx;
-//		}
-//
-//		float error = xDelta / 2.0f;
-//		int yStep = (startCoordinate->Y < endCoordinate->Y) ? 1 : -1;
-//		int y = (int) startCoordinate->Y;
-//
-//		int maxX = (int) endCoordinate->X;
-//
-//		int x;
-//		for (x = (int) startCoordinate->X; x < maxX; x++) {
-//			if (isBluntAngle) {
-//				if (!map->CmCoordinateToCell(y, x)->isWalkable()) {
-//					return false;
-//				}
-//			} else {
-//				if (!map->CmCoordinateToCell(x, y)->isWalkable()) {
-//					return false;
-//				}
-//			}
-//
-//			error -= yDelta;
-//			if (error < 0) {
-//				y += yStep;
-//				error += xDelta;
-//			}
-//		}
+		float sizeOfMovement = PixelsToCell/2;
+		float diffX = fabs(endCoordinate->X - startCoordinate->X);
+		float diffY = fabs(endCoordinate->Y - startCoordinate->Y);
+		float angle = atan(diffY/diffX);
+		float dx = cos(angle) * sizeOfMovement;
+		float dy = sin(angle) * sizeOfMovement;
+
+		if (startCoordinate->X > endCoordinate->X)
+		{
+			dx = -dx;
+		}
+
+		if (startCoordinate->Y > endCoordinate->Y)
+		{
+			dy = -dy;
+		}
+
+		float currentX = startCoordinate->X;
+		float currentY = startCoordinate->Y;
+		double distanceX = fabs(currentX - endCoordinate->X);
+		double distanceY = fabs(currentY - endCoordinate->Y);
+		float absdx = fabs(dx);
+		float absdy = fabs(dy);
+		while ((currentX != endCoordinate->X && distanceX > absdx) &&
+				(currentY != endCoordinate->Y && distanceY > absdy))
+		{
+			currentX += dx;
+			currentY += dy;
+			if (!map->CmCoordinateToCell(currentX, currentY)->isWalkable()) {
+				return false;
+			}
+
+			distanceY = fabs(currentY - endCoordinate->Y);
+			distanceX = fabs(currentX - endCoordinate->X);
+		}
 
 		return true;
 	}

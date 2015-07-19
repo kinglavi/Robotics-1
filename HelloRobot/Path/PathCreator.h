@@ -20,7 +20,7 @@ class PathCreator {
 public:
 	/* WAYPOINTS */
 	const float RADIUS_AROUND_POINT_CM = 10.0;
-	const unsigned MAX_WAYPOINT_SPACING = 10;
+	const unsigned MAX_WAYPOINT_SPACING = 20;
 
 	PathCreator();
 	virtual ~PathCreator();
