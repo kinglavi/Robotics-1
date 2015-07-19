@@ -22,12 +22,12 @@ namespace Mapping {
 			static const double NUM_OF_LAYERS;
 			static const unsigned NUM_NEIGHBORS;
 
-			Cell(unsigned col, unsigned row, double cost = COST_CLEAR);
+			Cell(unsigned row, unsigned col, double cost = COST_CLEAR);
 			Cell(const Cell& cell);
 			virtual ~Cell() {}
 
-			inline void setNeighbors(vector<Cell*> neighbors) { m_Neighbors = neighbors; }
-			inline vector<Cell*> getNeighbors() const { return m_Neighbors; }
+			inline void setNeighbors(vector<Cell*>* neighbors) { m_Neighbors = neighbors; }
+			inline vector<Cell*>* getNeighbors() const { return m_Neighbors; }
 			inline unsigned getCol() const { return m_Col; }
 			inline unsigned getRow() const { return m_Row; }
 			inline double getCost() const { return m_Cost; }
@@ -40,7 +40,7 @@ namespace Mapping {
 			Cell& operator=(const Cell& cell);
 			friend ostream& operator<<(ostream& os, Cell* cell);
 		protected:
-			vector<Cell*> m_Neighbors;
+			vector<Cell*>* m_Neighbors;
 			unsigned m_Col;
 			unsigned m_Row;
 			double m_Cost;

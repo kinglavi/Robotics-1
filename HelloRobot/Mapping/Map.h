@@ -49,6 +49,8 @@ public:
 	bool isInRange(int row, int col) const;
 	Cell* CmCoordinateToCell(double x, double y) const;
 	void PrintGrid();
+	void PrintGrid(Cell* start, Cell* end);
+	void PrintGrid(Cell* start, Cell* end, vector<Cell*> path);
 	private:
 	// Utility Methods
 	static unsigned getCellImageColor(unsigned row, unsigned col,

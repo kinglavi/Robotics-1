@@ -13,6 +13,7 @@
 #include "../Mapping/Grid.h"
 using namespace Mapping;
 
+
 namespace Path {
 
 class PathCreator {
@@ -20,7 +21,11 @@ public:
 	PathCreator();
 	virtual ~PathCreator();
 	vector<Cell*> CreatePath(Cell* start, Cell* dest);
+
+private:
 	void PutWeights();
+	vector<Cell*> RunAStar(Cell* start, Cell* end);
+	vector<Coordinates> SmoothPath(vector<Cell*> cellsPath, Coordinates start, Coordinates end);
 	bool IsStraitApprocah(Coordinates firstWorldLocationCm, Coordinates secondWorldLocationCm);
 };
 
