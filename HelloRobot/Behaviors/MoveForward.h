@@ -22,6 +22,8 @@ namespace Behaviors {
 		virtual bool startCond();
 		virtual bool stopCond();
 		virtual void action();
+
+		bool HitObstacle;
 	};
 }
 

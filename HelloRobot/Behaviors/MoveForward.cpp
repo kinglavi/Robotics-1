@@ -9,9 +9,9 @@
 #include "../Common/ConfigurationManager.h"
 using namespace Common;
 
-#define MIN_ANGLE -30
-#define MAX_ANGLE 30
-#define MAX_DIST_TO_OBSTACLE 0.5
+#define MIN_ANGLE -20
+#define MAX_ANGLE 20
+#define MAX_DIST_TO_OBSTACLE 0.3
 #define FORWARD_SPEED 15
 
 namespace Behaviors {
@@ -40,7 +40,8 @@ namespace Behaviors {
 			}
 		}
 
-		return isObstacleInFront;
+		HitObstacle = isObstacleInFront;
+		return HitObstacle;
 	}
 
 	bool MoveForward::checkIfReachedTarget()
@@ -63,13 +64,13 @@ namespace Behaviors {
 
 	bool MoveForward::stopCond()
 	{
-		bool stop = checkIfReachedTarget();
-		if (stop)
+		if (checkObstacleInFront() || checkIfReachedTarget())
 		{
 			_robot->setSpeed(0, 0);
+			return true;
 		}
 
-		return stop;
+		return false;
 	}
 
 	void MoveForward::action()

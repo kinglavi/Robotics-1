@@ -78,11 +78,9 @@ unsigned Robot::deg_to_index(double degree) {
 vector<float> Robot::getLaserScan()
 {
 	vector<float> scans;
-	scans.push_back(laserProxy->GetRange(333));
-//
-//	for (unsigned int i = 0; i < laserProxy->GetCount(); i++)
-//	{
-//		scans.push_back((*laserProxy)[i]);
-//	}
+	for (unsigned int i = 0; i < laserProxy->GetCount(); i++)
+	{
+		scans.push_back((float)((*laserProxy)[i]));
+	}
 	return scans;
 }
