@@ -28,10 +28,8 @@ Robot::Robot()
 void Robot::SetStartLocation(Coordinates* location) {
 	_startLocation = location;
 
-	double Cm_To_Pixel_Ratio = ConfigurationManager::Instance()->GetMap()->Cm_To_Pixel_Ratio;
-
-	double initialXPos = cm_to_m(_startLocation->X );
-	double initialYPos = -1 * cm_to_m(_startLocation->Y);
+	double initialXPos = cm_to_m(_startLocation->X * 2.5);
+	double initialYPos = -1 * cm_to_m(_startLocation->Y * 2.5);
 	double initialYaw = degreesToRadians(_startLocation->Yaw);
 
 	position2dProxy->SetOdometry(initialXPos,initialYPos,initialYaw);

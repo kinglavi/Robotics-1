@@ -42,7 +42,7 @@ namespace Common{
 				}
 			}
 		}
-		cout << "Manager stopped" << endl;
+		cout << "Reached to destination!" << endl;
 	}
 
 }

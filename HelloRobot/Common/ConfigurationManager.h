@@ -45,6 +45,11 @@ private:
 	int Goal_X;
 	int Goal_Y;
 
+	// Start Location
+	int Start_X;
+	int Start_Y;
+	double Start_Yaw;
+
 	Robot* robot;
 	Map* map;
 
