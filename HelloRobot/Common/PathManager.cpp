@@ -20,6 +20,10 @@ PathManager::PathManager(vector<Coordinates*> path) {
 	}
 	_path = _path2;
 
+	vector <vector<Cell*> > grid = ConfigurationManager::Instance()->GetMap()->Grid;
+
+	// remove the first item because it's the robot's starting point
+	_path.erase(_path.begin());
 	_currentIndex = 0;
 }
 

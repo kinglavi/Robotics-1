@@ -48,8 +48,9 @@ namespace Behaviors {
 		Coordinates* next = _pathManager->GetNextCoordinateInPath();
 		Coordinates* current = _robot->GetRobotsPosition();
 		cout << "Robot X=" << current->X << " Y=" << current->Y << " Target X=" << next->X << " Y=" << next->Y << endl;
-		if (ConvertionHandler::aboutEquals(next->X, current->X, 0.04) && ConvertionHandler::aboutEquals(next->Y, current->Y, 0.04))
+		if (ConvertionHandler::aboutEquals(next->X, current->X, 4) && ConvertionHandler::aboutEquals(next->Y, current->Y, 4))
 		{
+			_pathManager->MoveToNextCoordinate();
 			return true;
 		}
 		return false;

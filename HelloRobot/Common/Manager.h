@@ -1,7 +1,5 @@
 #include "../Robot.h"
 #include "../Behaviors/Behavior.h"
-#include "../Behaviors/MoveForward.h"
-#include "../Behaviors/TurnLeftBehavior.h"
 #include "ConfigurationManager.h"
 
 using namespace Behaviors;
@@ -12,12 +10,13 @@ namespace Common{
 
 
 	private:
-		PathManager* _pathManager;
-		MoveForward* _moveBehavior;
-		TurnLeftBehavior* _rotateBehavior;
+		vector<Behavior *> _nextBehaviors;
+		Behavior *_currBehavior;
 	public:
-		Manager(PathManager *pathManager);
+		Manager(Behavior *startBehavior);
 		void run();
+		void addNext(Behavior *beh);
+		Behavior *selectNext();
 		virtual ~Manager();
 	};
 }

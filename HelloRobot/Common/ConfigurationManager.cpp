@@ -70,7 +70,7 @@ void ConfigurationManager::ParseLine(string line)
 		accurance = value.find(delimiter);
 		double Start_Y = atoi(value.substr(0, accurance).c_str());
 		value.erase(0, accurance + 1);
-		double Start_Yaw = atoi(value.substr(0, value.find(delimiter)).c_str());
+		double Start_Yaw = degreesToRadians(atoi(value.substr(0, value.find(delimiter)).c_str()));
 		robot->SetStartLocation(new Coordinates(Start_X, Start_Y, Start_Yaw));
 	}
 	else if(key == "goal")
