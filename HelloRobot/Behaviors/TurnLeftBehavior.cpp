@@ -27,6 +27,7 @@ bool TurnLeftBehavior::ShouldTurnLeft()
 	Coordinates* nextInLine = _pathManager->GetNextCoordinateInPath();
 	double angle = CalcAngle(robotPosition, nextInLine);
 	cout << "Robot's angle=" << robotPosition->Yaw << " Desired angle=" << angle << endl;
+	_turnLeft = angle > robotPosition->Yaw;
 	return fabs(angle - robotPosition->Yaw) < 2;
 }
 
@@ -67,6 +68,8 @@ bool TurnLeftBehavior::stopCond()
 void TurnLeftBehavior::action()
 {
 	double newYawSpeed = MaxYawChangeSpeed -20;
+	if (!_turnLeft)
+		newYawSpeed = -newYawSpeed;
 	_robot->setSpeed(0, degreesToRadians(newYawSpeed));
 }
 

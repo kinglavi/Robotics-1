@@ -21,6 +21,7 @@ namespace Behaviors {
 	private:
 		bool ShouldTurnLeft	();
 		double CalcAngle(Coordinates* first, Coordinates* second);
+		bool _turnLeft;
 	};
 
 } /* namespace Path */
