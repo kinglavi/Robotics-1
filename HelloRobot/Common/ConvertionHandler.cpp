@@ -71,11 +71,8 @@ double ConvertionHandler::makeAngleNormal(double angle){
 
 Coordinates* ConvertionHandler::getCoordinateInCm(Coordinates* coordinate) {
 	Coordinates* coord = new Coordinates();
-	coord->X = coordinate->X;
-	coord->Y = coordinate->Y;
-	//coord->X = floorRound(m_to_cm(coordinate->X));
-	//coord->Y = floorRound(m_to_cm(coordinate->Y));
-	coord->Yaw = coordinate->Yaw;
+	coord->X = cm_to_m(coordinate->X);
+	coord->Y = -1 * cm_to_m(coordinate->Y);
 	return coord;
 }
 

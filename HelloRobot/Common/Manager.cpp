@@ -4,45 +4,42 @@
 using namespace Common;
 
 namespace Common{
-	Manager::Manager(Behavior *startBehavior) : _currBehavior(startBehavior) {
-//		_robot = ConfigurationManager::Instance()->GetRobot();
+	Manager::Manager(PathManager *pathManager) {
+		_pathManager = pathManager;
+		_moveBehavior = new MoveForward(pathManager);
+		_rotateBehavior = new TurnLeftBehavior(pathManager);
 	}
 
 	Manager::~Manager(){
 
 	}
 
-	void Manager::addNext(Behavior *beh) {
-		_nextBehaviors.push_back(beh);
-	}
-
-	Behavior* Manager::selectNext() {
-		for (unsigned int i = 0; i < _nextBehaviors.size(); i++)
-		{
-			if (_nextBehaviors[i]->startCond())
-				return _nextBehaviors[i];
-		}
-		return NULL;
-	}
-
 	void Manager::run()
 	{
 		Robot* robot = ConfigurationManager::Instance()->GetRobot();
 		robot->Read();
-		if (!_currBehavior->startCond()) {
-			cout << "Cannot start the first behavior" << endl;
-			return;
-		}
 
-		while (_currBehavior != NULL) {
-			_currBehavior->action();
-			robot->Read();
+		while (_pathManager->MoveToNextCoordinate()) {
+			if (_rotateBehavior->startCond())
+			{
+				while (!_rotateBehavior->stopCond())
+				{
+					robot->Read();
+					_rotateBehavior->action();
+				}
+			}
+
 			Coordinates* currentPosition = robot->GetRobotsPosition();
 
 			// Update particles...
 
-			if (_currBehavior->stopCond()) {
-				_currBehavior = selectNext();
+			if (_moveBehavior->startCond())
+			{
+				while (!_moveBehavior->stopCond())
+				{
+					robot->Read();
+					_moveBehavior->action();
+				}
 			}
 		}
 		cout << "Manager stopped" << endl;
