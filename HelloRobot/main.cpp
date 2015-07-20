@@ -41,12 +41,7 @@ int main() {
 
 	PathManager* pathManager = new PathManager(robotPath);
 
-	MoveForward* move = new MoveForward(pathManager);
-	TurnLeftBehavior* turnLeft = new TurnLeftBehavior(pathManager);
-
-	Manager* movementManager = new Manager(turnLeft);
-	movementManager->addNext(move);
-	movementManager->addNext(turnLeft);
+	Manager* movementManager = new Manager(pathManager);
 
 	movementManager->run();
 

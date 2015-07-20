@@ -28,19 +28,20 @@ Robot::Robot()
 void Robot::SetStartLocation(Coordinates* location) {
 	_startLocation = location;
 
-	do {
-		position2dProxy->SetOdometry(_startLocation->X,_startLocation->Y,_startLocation->Yaw);
-		playerClient->Read();
-	} while (!ConvertionHandler::aboutEquals(position2dProxy->GetXPos(), _startLocation->X, 0.01)
-	        || !ConvertionHandler::aboutEquals(position2dProxy->GetYPos(), _startLocation->Y, 0.01)
-	        || !ConvertionHandler::aboutEquals(position2dProxy->GetYaw(), _startLocation->Yaw, degreesToRadians(0.5)));
+	double Cm_To_Pixel_Ratio = ConfigurationManager::Instance()->GetMap()->Cm_To_Pixel_Ratio;
+
+	double initialXPos = cm_to_m(_startLocation->X );
+	double initialYPos = -1 * cm_to_m(_startLocation->Y);
+	double initialYaw = degreesToRadians(_startLocation->Yaw);
+
+	position2dProxy->SetOdometry(initialXPos,initialYPos,initialYaw);
 }
 
 Coordinates* Robot::GetRobotsPosition()
 {
 	double x = position2dProxy->GetXPos();
 	double y = position2dProxy->GetYPos();
-	double yaw = ConvertionHandler::makeAngleNormal(position2dProxy->GetYaw());
+	double yaw = radiansToDegrees(position2dProxy->GetYaw());
 
 
 	Coordinates* position = new Coordinates(x,y,yaw);
