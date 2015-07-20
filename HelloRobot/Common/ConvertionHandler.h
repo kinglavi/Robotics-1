@@ -2,12 +2,15 @@
 
 #include <math.h>
 #include <float.h>
+#include "../Mapping/Coordinates.h"
 
 #define degreesToRadians(angleDegrees) (angleDegrees * M_PI / 180.0)
 #define radiansToDegrees(angleRadians) (angleRadians * 180.0 / M_PI)
 
 #define m_to_cm(m) (m * 100)
 #define cm_to_m(cm) (0.01 * cm)
+
+using namespace Mapping;
 
 class ConvertionHandler {
 	public:
@@ -20,4 +23,5 @@ class ConvertionHandler {
 		static double floorRound(double x, int precisionValue = 10000);
 		static float normalPdf(float x, float median, float s_dev);
 		static double makeAngleNormal(double angle);
+		static Coordinates* getCoordinateInCm(Coordinates* coordinate);
 };

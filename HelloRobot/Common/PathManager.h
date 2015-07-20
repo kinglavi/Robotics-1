@@ -8,7 +8,9 @@
 #ifndef PATHMANAGER_H_
 #define PATHMANAGER_H_
 #include "../Mapping/Coordinates.h"
+#include "../Common/ConvertionHandler.h"
 #include <vector>
+
 using namespace Mapping;
 
 namespace Common {

@@ -12,7 +12,15 @@ namespace Common {
 
 PathManager::PathManager(vector<Coordinates*> path) {
 	// TODO Auto-generated constructor stub
-	_path = path;
+	//_path = path;
+	vector<Coordinates*> _path2;
+	for(int i=0; i < path.size(); i++)
+	{
+		_path2.push_back(ConvertionHandler::getCoordinateInCm(path[i]));
+	}
+	_path = _path2;
+
+	vector <vector<Cell*> > grid = ConfigurationManager::Instance()->GetMap()->Grid;
 
 	// remove the first item because it's the robot's starting point
 	_path.erase(_path.begin());

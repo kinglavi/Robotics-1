@@ -37,6 +37,7 @@ namespace Common{
 		while (_currBehavior != NULL) {
 			_currBehavior->action();
 			robot->Read();
+			Coordinates* currentPosition = robot->GetRobotsPosition();
 
 			// Update particles...
 
