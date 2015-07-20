@@ -25,11 +25,6 @@ public:
 	virtual ~ConfigurationManager();
 	static ConfigurationManager* Instance();
 
-	// Start Location
-	int GetStartX(){return Start_X;}
-	int GetStartY(){return Start_Y;}
-	int GetStartYaw(){return Start_Yaw;}
-
 	// Goal
 	int GetGoalX(){return Goal_X;}
 	int GetGoalY(){return Goal_Y;}
@@ -45,11 +40,6 @@ private:
 	ConfigurationManager();
 	ConfigurationManager(const ConfigurationManager&) = delete;
 	ConfigurationManager& operator=(const ConfigurationManager&) = delete;
-
-	// Start Location
-	int Start_X;
-	int Start_Y;
-	int Start_Yaw;
 
 	// Goal
 	int Goal_X;

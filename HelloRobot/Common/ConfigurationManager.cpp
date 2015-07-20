@@ -65,13 +65,13 @@ void ConfigurationManager::ParseLine(string line)
 	{
 		delimiter = " ";
 		int accurance = value.find(delimiter);
-		Start_X = atoi(value.substr(0, accurance).c_str());
+		double Start_X = atoi(value.substr(0, accurance).c_str());
 		value.erase(0, value.find(delimiter) + 1);
 		accurance = value.find(delimiter);
-		Start_Y = atoi(value.substr(0, accurance).c_str());
+		double Start_Y = atoi(value.substr(0, accurance).c_str());
 		value.erase(0, accurance + 1);
-		Start_Yaw = atoi(value.substr(0, value.find(delimiter)).c_str());
-
+		double Start_Yaw = degreesToRadians(atoi(value.substr(0, value.find(delimiter)).c_str()));
+		robot->SetStartLocation(new Coordinates(Start_X, Start_Y, Start_Yaw));
 	}
 	else if(key == "goal")
 	{

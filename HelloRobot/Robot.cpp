@@ -6,6 +6,11 @@
  */
 
 #include "Robot.h"
+#include "Common/ConfigurationManager.h"
+#include <vector>
+#include <libplayerc/playerc.h>
+
+using namespace Common;
 
 	const unsigned LASER_SAMPLES = 666;
 	const double LASER_FOV_DEGREE = 240.0;
@@ -16,17 +21,29 @@ Robot::Robot()
 	laserProxy = new LaserProxy(playerClient);
 	position2dProxy = new Position2dProxy(playerClient);
 
-	Position* pos = GetRobotsPosition();
-	position2dProxy->SetOdometry(pos->x,pos->y,pos->yaw);
+	position2dProxy->SetMotorEnable(true);
+
 }
 
-Position* Robot::GetRobotsPosition()
+void Robot::SetStartLocation(Coordinates* location) {
+	_startLocation = location;
+
+	do {
+		position2dProxy->SetOdometry(_startLocation->X,_startLocation->Y,_startLocation->Yaw);
+		playerClient->Read();
+	} while (!ConvertionHandler::aboutEquals(position2dProxy->GetXPos(), _startLocation->X, 0.01)
+	        || !ConvertionHandler::aboutEquals(position2dProxy->GetYPos(), _startLocation->Y, 0.01)
+	        || !ConvertionHandler::aboutEquals(position2dProxy->GetYaw(), _startLocation->Yaw, degreesToRadians(0.5)));
+}
+
+Coordinates* Robot::GetRobotsPosition()
 {
 	double x = position2dProxy->GetXPos();
 	double y = position2dProxy->GetYPos();
-	double yaw = position2dProxy->GetYaw();
+	double yaw = ConvertionHandler::makeAngleNormal(position2dProxy->GetYaw());
 
-	Position* position = new Position(x,y,yaw);
+
+	Coordinates* position = new Coordinates(x,y,yaw);
 
 	return position;
 }
@@ -59,12 +76,14 @@ unsigned Robot::deg_to_index(double degree) {
 	return index;
 }
 
-float* Robot::getLaserScan()
+vector<float> Robot::getLaserScan()
 {
-	float *scan = new float[_lp.GetCount()];
-	for (unsigned int i = 0; i < _lp.GetCount(); i++)
-	{
-		scan[i] = _lp[i];
-	}
-	return scan;
+	vector<float> scans;
+	scans.push_back(laserProxy->GetRange(333));
+//
+//	for (unsigned int i = 0; i < laserProxy->GetCount(); i++)
+//	{
+//		scans.push_back((*laserProxy)[i]);
+//	}
+	return scans;
 }

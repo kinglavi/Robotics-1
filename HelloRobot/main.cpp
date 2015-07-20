@@ -9,10 +9,15 @@
 
 #include "Mapping/pngUtil.h"
 
-#include "Common/MovementManager.h"
 #include "Common/StringHelper.h"
 #include "Common/ConfigurationManager.h"
+#include "Common/PathManager.h"
+#include "Common/Manager.h"
 using namespace Common;
+
+#include "Behaviors/TurnLeftBehavior.h"
+#include "Behaviors/MoveForward.h"
+using namespace Behaviors;
 
 #include "Path/PathCreator.h"
 using namespace Path;
@@ -24,10 +29,7 @@ int main() {
 
 	ConfigurationManager::Instance()->GetMap()->CreateGrid(((robotSize/2)/mapRes));
 
-	int startX = ConfigurationManager::Instance()->GetStartX();
-	int startY = ConfigurationManager::Instance()->GetStartY();
-	int startYaw = ConfigurationManager::Instance()->GetStartYaw();
-	Coordinates* start = new Coordinates(startX, startY, startYaw);
+	Coordinates* start = ConfigurationManager::Instance()->GetRobot()->GetStartLocation();
 
 	int finishX = ConfigurationManager::Instance()->GetGoalX();
 	int finishY = ConfigurationManager::Instance()->GetGoalY();
@@ -37,27 +39,18 @@ int main() {
 	PathCreator* creator = new PathCreator();
 	vector<Coordinates*> robotPath = creator->CreatePath(start, goal);
 
-	MovementManager* manager = new MovementManager();
-	Robot* robot = ConfigurationManager::Instance()->GetRobot();
-	vector<Obstacle*> obs = manager->GetRelativePrespective();
-	vector<Obstacle*>::iterator i;
+	PathManager* pathManager = new PathManager(robotPath);
 
-	for(i=obs.begin(); i!=obs.end(); i++)
-	{
-		cout << "Angle: " << (*i)->Angle << ", Distance: " << (*i)->Distance << endl;
-	}
+	MoveForward* move = new MoveForward(pathManager);
+	TurnLeftBehavior* turnLeft = new TurnLeftBehavior(pathManager);
 
-	while (true) {
-		//robot->playerClient->Read();
+	Manager* movementManager = new Manager(turnLeft);
+	movementManager->addNext(move);
+	movementManager->addNext(turnLeft);
+
+	movementManager->run();
 
 
-/*		if(manager->GetRelativePrespective())
-			manager->pp->SetSpeed(0.0,0.3);
-		else
-			manager->pp->SetSpeed(0.8,0.0);*/
-
-		//robot->GetRobotsPosition();
-	}
 
 	return 0;
 }

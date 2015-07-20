@@ -10,12 +10,13 @@
 
 #include "Behavior.h"
 namespace Behaviors {
-	class MoveForward : Behavior {
+	class MoveForward : public Behavior {
 	private:
 		bool checkObstacleInFront();
+		bool checkIfReachedTarget();
 
 	public:
-		MoveForward(Robot *robot);
+		MoveForward(PathManager* pathManager);
 		virtual ~MoveForward();
 
 		virtual bool startCond();

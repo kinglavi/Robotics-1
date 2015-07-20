@@ -12,21 +12,24 @@
 #include <string>
 #include <stdlib.h>
 #include <vector>
-#include "Position.h"
+#include "Mapping/Coordinates.h"
 #include <stdexcept>
-#include "ConvertionHandler.h"
+#include "Common/ConvertionHandler.h"
 
 using namespace PlayerCc;
 using namespace std;
+using namespace Mapping;
 
 class Robot {
 public:
 	Robot();
 	void Read();
 	void setSpeed(double forward_CmPerSec, double angular_RadiansPerSec);
-	float* getLaserScan();
+	vector<float> getLaserScan();
 	static double index_to_deg(int index);
 	static unsigned deg_to_index(double degree);
+	inline Coordinates* GetStartLocation() { return _startLocation; }
+	void SetStartLocation(Coordinates* location);
 	int Width;
 	int Height;
 
@@ -34,7 +37,9 @@ public:
 	LaserProxy* laserProxy;
 	Position2dProxy* position2dProxy;
 
-	Position* GetRobotsPosition();
+	Coordinates* GetRobotsPosition();
+private:
+	Coordinates* _startLocation;
 };
 
 #endif /* ROBOT_H_ */

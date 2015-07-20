@@ -6,12 +6,17 @@ using namespace Behaviors;
 
 namespace Common{
 	class Manager {
+
+
+
 	private:
-		Robot* _robot;
+		vector<Behavior *> _nextBehaviors;
 		Behavior *_currBehavior;
 	public:
-		Manager(Robot *robot, Behavior *startBehavior);
+		Manager(Behavior *startBehavior);
 		void run();
+		void addNext(Behavior *beh);
+		Behavior *selectNext();
 		virtual ~Manager();
 	};
 }

@@ -19,4 +19,5 @@ class ConvertionHandler {
 		static double angleBetweenPointsDeg(double x1, double y1, double x2, double y2);
 		static double floorRound(double x, int precisionValue = 10000);
 		static float normalPdf(float x, float median, float s_dev);
+		static double makeAngleNormal(double angle);
 };

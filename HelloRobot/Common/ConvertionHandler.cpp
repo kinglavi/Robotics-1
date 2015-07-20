@@ -55,3 +55,19 @@ float ConvertionHandler::normalPdf(float x, float median, float s_dev) {
 
 	return inv_sqrt_2pi / s_dev * exp(-0.5f * a * a);
 }
+
+double ConvertionHandler::makeAngleNormal(double angle){
+	while (angle < 0)
+	{
+		angle = ConvertionHandler::floorRound(angle + 2 * M_PI);
+	}
+
+	while (angle > 2*M_PI)
+	{
+		angle = ConvertionHandler::floorRound(angle - 2 * M_PI);
+	}
+
+	return angle;
+}
+
+
